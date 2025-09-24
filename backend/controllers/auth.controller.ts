@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user.model.ts';
 import type { Request, Response, RequestHandler } from 'express';
 import { redis } from '../lib/redis.ts';
-import { ref } from 'process';
 
 const generateToken = (userId: string) => {
 	const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: '15m' });
@@ -126,6 +125,15 @@ export const refreshToken: RequestHandler = async (req: Request, res: Response) 
 		res.status(200).json({ message: 'Access token refreshed' });
 	} catch (error) {
 		console.log('Error during token refresh:', error);
+		res.status(500).json({ message: 'Server error', error });
+	}
+};
+
+export const getUserProfile: RequestHandler = async (req: Request, res: Response) => {
+	try {
+		res.json(req.user);
+	} catch (error) {
+		console.log('Error getting user profile:', error);
 		res.status(500).json({ message: 'Server error', error });
 	}
 };
