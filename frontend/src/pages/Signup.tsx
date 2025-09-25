@@ -1,30 +1,20 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Container } from '@mui/material';
-import axios from '../lib/axios';
+import { useUserStore } from '../stores/useUserStore';
 
 const Signup = () => {
 	const [formData, setFormData] = useState({
+		name: '',
 		email: '',
 		password: '',
-		name: '',
 	});
-	const [error, setError] = useState('');
-	const [success, setSuccess] = useState('');
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setFormData({ ...formData, [e.target.name]: e.target.value });
-	};
+	const { signup, loading } = useUserStore();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		try {
-			await axios.post('/auth/signup', formData);
-			setSuccess('Signup successful!');
-			setError('');
-		} catch (err: any) {
-			setError(err.response?.data?.message || 'Signup failed');
-			setSuccess('');
-		}
+		console.log('Form data:', formData);
+		signup(formData.name, formData.email, formData.password);
 	};
 
 	return (
@@ -53,7 +43,7 @@ const Signup = () => {
 						label='Name'
 						name='name'
 						value={formData.name}
-						onChange={handleChange}
+						onChange={(e) => setFormData({ ...formData, name: e.target.value })}
 						fullWidth
 						margin='normal'
 						required
@@ -63,7 +53,7 @@ const Signup = () => {
 						name='email'
 						type='email'
 						value={formData.email}
-						onChange={handleChange}
+						onChange={(e) => setFormData({ ...formData, email: e.target.value })}
 						fullWidth
 						margin='normal'
 						required
@@ -73,34 +63,29 @@ const Signup = () => {
 						name='password'
 						type='password'
 						value={formData.password}
-						onChange={handleChange}
+						onChange={(e) => setFormData({ ...formData, password: e.target.value })}
 						fullWidth
 						margin='normal'
 						required
 					/>
+
 					<Button
 						type='submit'
 						variant='contained'
 						color='primary'
 						fullWidth
 						sx={{ mt: 2 }}>
-						Signup
+						{loading ? (
+							<Typography
+								variant='body1'
+								sx={{ mt: 2 }}>
+								Signing up...
+							</Typography>
+						) : (
+							'Signup'
+						)}
 					</Button>
 				</Box>
-				{error && (
-					<Typography
-						color='error'
-						sx={{ mt: 2 }}>
-						{error}
-					</Typography>
-				)}
-				{success && (
-					<Typography
-						color='success.main'
-						sx={{ mt: 2 }}>
-						{success}
-					</Typography>
-				)}
 			</Box>
 		</Container>
 	);

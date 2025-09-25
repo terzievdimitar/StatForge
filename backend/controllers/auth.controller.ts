@@ -30,7 +30,8 @@ const setCookies = (res: Response, accessToken: string, refreshToken: string) =>
 };
 
 export const signup: RequestHandler = async (req: Request, res: Response) => {
-	const { email, password, name } = req.body as { email: string; password: string; name: string };
+	const { name, email, password } = req.body as { name: string; email: string; password: string };
+	console.log('Signup request body:', req.body);
 
 	try {
 		const userExists = await User.findOne({ email });
@@ -39,7 +40,7 @@ export const signup: RequestHandler = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: 'User already exists' });
 		}
 
-		const user = await User.create({ email, password, name });
+		const user = await User.create({ name, email, password });
 
 		// authenticate user
 		const { accessToken, refreshToken } = generateToken(user._id.toString());
