@@ -4,6 +4,7 @@ import { connectDB } from './lib/db.ts';
 import authRoutes from './routes/auth.route.ts';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import githubRoutes from './routes/github.routes.ts';
 
 dotenv.config({ path: '../.env' });
 
@@ -22,6 +23,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/github', githubRoutes);
 
 connectDB().then(() => {
 	app.listen(PORT, () => {

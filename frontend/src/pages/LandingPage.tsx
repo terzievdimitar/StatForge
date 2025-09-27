@@ -124,6 +124,7 @@ const LandingPage = () => {
 						variant='contained'
 						color='primary'
 						endIcon={<ArrowForwardIcon />}
+						href='/signup'
 						sx={{
 							boxShadow: '0 10px 24px rgba(235,94,40,.35)',
 							'&:hover': { boxShadow: '0 12px 28px rgba(235,94,40,.45)' },
