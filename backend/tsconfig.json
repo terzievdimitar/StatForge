@@ -1,0 +1,39 @@
+{
+	"compilerOptions": {
+		// File Layout
+		"rootDir": ".",
+		"outDir": "./dist",
+
+		// Runtime/Module (Node ESM)
+		"target": "ES2022",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"lib": ["ES2022"],
+		"types": ["node"],
+
+		// Outputs
+		"sourceMap": true,
+		"declaration": true,
+		"declarationMap": true,
+		"noEmit": true, // Added this line
+
+		// Strictness
+		"strict": true,
+		"noUncheckedIndexedAccess": true,
+		"exactOptionalPropertyTypes": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+
+		// Interop & Syntax
+		"esModuleInterop": true,
+		"verbatimModuleSyntax": true,
+		"isolatedModules": true,
+		"moduleDetection": "force",
+		"allowImportingTsExtensions": true,
+
+		// Node-style resolution
+		"resolveJsonModule": true
+	},
+	"include": ["**/*.ts"],
+	"exclude": ["dist", "node_modules"]
+}

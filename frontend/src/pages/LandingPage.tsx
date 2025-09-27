@@ -5,7 +5,6 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { colors } from '../theme/theme';
 
 const LandingPage = () => {
