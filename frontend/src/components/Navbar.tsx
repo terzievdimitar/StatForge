@@ -21,7 +21,7 @@ function ResponsiveAppBar() {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
-	const { user }: any = useUserStore();
+	const { user, logout } = useUserStore();
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -34,8 +34,11 @@ function ResponsiveAppBar() {
 		setAnchorElNav(null);
 	};
 
-	const handleCloseUserMenu = () => {
+	const handleCloseUserMenu = (setting?: string) => {
 		setAnchorElUser(null);
+		if (setting === 'Logout') {
+			logout();
+		}
 	};
 
 	return (
@@ -149,11 +152,11 @@ function ResponsiveAppBar() {
 										horizontal: 'right',
 									}}
 									open={Boolean(anchorElUser)}
-									onClose={handleCloseUserMenu}>
+									onClose={() => handleCloseUserMenu()}>
 									{settings.map((setting) => (
 										<MenuItem
 											key={setting}
-											onClick={handleCloseUserMenu}>
+											onClick={() => handleCloseUserMenu(setting)}>
 											<Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
 										</MenuItem>
 									))}

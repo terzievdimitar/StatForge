@@ -1,41 +1,23 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Container, Paper, CircularProgress } from '@mui/material';
-import axios from '../lib/axios';
-import { useTheme } from '@mui/material/styles';
+import { colors } from '../theme/theme';
+import { useUserStore } from '../stores/useUserStore';
 
 const Login = () => {
-	const theme = useTheme();
-	const colors = {
-		stone: theme.palette.grey[800],
-		cream: theme.palette.common.white,
-		sand: theme.palette.grey[400],
-		accent: theme.palette.primary.main,
-	};
 	const [formData, setFormData] = useState({
 		email: '',
 		password: '',
 	});
-	const [error, setError] = useState('');
-	const [success, setSuccess] = useState('');
-	const [loading, setLoading] = useState(false);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
+	const { login, loading } = useUserStore();
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		setLoading(true);
-		try {
-			await axios.post('/auth/login', formData);
-			setSuccess('Login successful!');
-			setError('');
-		} catch (err: any) {
-			setError(err.response?.data?.message || 'Login failed');
-			setSuccess('');
-		} finally {
-			setLoading(false);
-		}
+		login(formData.email, formData.password);
 	};
 
 	return (

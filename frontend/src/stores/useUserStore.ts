@@ -5,6 +5,8 @@ interface UserStore {
 	user: { name: string; email: string } | null;
 	loading: boolean;
 	signup: (name: string, email: string, password: string) => Promise<void>;
+	login: (email: string, password: string) => Promise<void>;
+	logout: () => Promise<void>;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -33,6 +35,18 @@ export const useUserStore = create<UserStore>((set) => ({
 		} catch (error) {
 			set({ loading: false });
 			console.error('Login error:', error);
+		}
+	},
+
+	logout: async () => {
+		set({ loading: true });
+		try {
+			await axios.post('/auth/logout');
+			set({ user: null, loading: false });
+			console.log('User logged out');
+		} catch (error) {
+			set({ loading: false });
+			console.error('Logout error:', error);
 		}
 	},
 }));
