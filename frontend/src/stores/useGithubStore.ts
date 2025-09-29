@@ -5,10 +5,10 @@ interface GithubStore {
 	user: { name: string; email: string } | null;
 	repositories: any[]; // Add repositories state
 	loading: boolean;
-	githubLogin: () => Promise<void>;
-	checkGitHubCallback: (code: string) => Promise<void>;
-	setRepositories: (repos: any[]) => void; // Add setRepositories function
-	getRepositories: () => Promise<void>; // Add getRepositories function
+	setRepositories: (repositories: any[]) => void; // Add setRepositories function
+	githubAppInstall: () => Promise<void>;
+	githubAppCallback: (code: string, installationId: string) => Promise<void>;
+	getRepositories: () => Promise<void>; // Modified to include installationId
 }
 
 export const useGithubStore = create<GithubStore>((set) => ({
@@ -16,35 +16,33 @@ export const useGithubStore = create<GithubStore>((set) => ({
 	repositories: [], // Initialize repositories state
 	loading: false,
 
-	githubLogin: async () => {
+	githubAppInstall: async () => {
 		set({ loading: true });
 		try {
-			// Redirect to the backend's GitHub login endpoint
-			window.location.href = 'http://localhost:3000/api/github';
+			// Redirect to the GitHub App installation URL
+			window.location.href = 'http://localhost:3000/api/github/app-install';
 		} catch (error) {
-			set({ loading: false });
-			console.error('GitHub login error:', error);
+			console.error('GitHub App installation error:', error);
 		}
 	},
 
-	checkGitHubCallback: async (code: string) => {
+	githubAppCallback: async (code: string, installationId: string) => {
 		set({ loading: true });
 		try {
-			const response = await axios.get(`/api/github/callback?code=${code}`);
-			set({ user: response.data.user, repositories: response.data.repositories, loading: false });
+			const response = await axios.get(`/api/github/app-callback?code=${code}&installation_id=${installationId}&setup_action=install`);
+			set({ repositories: response.data.repositories, loading: false });
 		} catch (error) {
 			set({ loading: false });
-			console.error('GitHub callback error:', error);
+			console.error('Failed to handle GitHub App callback:', error);
 		}
 	},
 
-	setRepositories: (repos: any[]) => set({ repositories: repos }), // Implement setRepositories
-
+	setRepositories: (repositories: any[]) => set({ repositories: repositories }), // Implement setRepositories
 	getRepositories: async () => {
 		set({ loading: true });
 		try {
 			const response = await axios.get('/api/github/repositories');
-			set({ repositories: response.data, loading: false });
+			set({ repositories: response.data.repositories, loading: false });
 		} catch (error) {
 			set({ loading: false });
 			console.error('Failed to fetch repositories:', error);

@@ -1,23 +1,27 @@
-import { Box, Typography, List, ListItem, ListItemText, Button, Stack } from '@mui/material';
+import { Box, Typography, Button, Stack, List, ListItem, ListItemText, CircularProgress } from '@mui/material';
 import { useGithubStore } from '../stores/useGithubStore';
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import CircularProgress from '@mui/material/CircularProgress';
 
 const Dashboard = () => {
-	const { githubLogin, repositories, getRepositories, checkGitHubCallback, loading } = useGithubStore();
+	const { repositories, loading, githubAppInstall, githubAppCallback, getRepositories } = useGithubStore();
 	const [searchParams] = useSearchParams();
 
 	useEffect(() => {
 		const code = searchParams.get('code');
-		if (code) {
-			checkGitHubCallback(code);
+		const installationId = searchParams.get('installation_id');
+		if (code && installationId) {
+			githubAppCallback(code, installationId);
 		}
-	}, [searchParams, checkGitHubCallback]);
+	}, [searchParams, githubAppCallback]);
 
 	useEffect(() => {
 		getRepositories();
 	}, [getRepositories]);
+
+	// Debug logs (do not render in JSX)
+	console.log('Rendering repositories:', repositories);
+	console.log('Repositories length:', repositories.length);
 
 	return (
 		<Box sx={{ p: 4 }}>
@@ -28,7 +32,7 @@ const Dashboard = () => {
 			</Typography>
 
 			{repositories.length > 0 ? (
-				loading ? (
+				loading && repositories.length === 0 ? (
 					<Typography>
 						<CircularProgress
 							size={20}
@@ -52,7 +56,6 @@ const Dashboard = () => {
 				<Typography>No repositories found.</Typography>
 			)}
 
-			{/* GitHub Login Button */}
 			<Stack
 				direction='row'
 				justifyContent='center'
@@ -60,7 +63,7 @@ const Dashboard = () => {
 				<Button
 					variant='contained'
 					color='secondary'
-					onClick={githubLogin}>
+					onClick={githubAppInstall}>
 					Login with GitHub
 				</Button>
 			</Stack>
