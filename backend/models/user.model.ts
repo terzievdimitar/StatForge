@@ -7,6 +7,7 @@ export interface IUser extends mongoose.Document {
 	email: string;
 	password: string;
 	name: string;
+	githubInstallationId?: string; // Add GitHub installation ID field
 	comparePassword(password: string): Promise<boolean>;
 }
 
@@ -15,6 +16,7 @@ const userSchema = new mongoose.Schema<IUser>(
 		email: { type: String, required: true, unique: true },
 		password: { type: String, required: true },
 		name: { type: String, required: true },
+		githubInstallationId: { type: String }, // Add GitHub installation ID field
 	},
 	{ timestamps: true }
 );

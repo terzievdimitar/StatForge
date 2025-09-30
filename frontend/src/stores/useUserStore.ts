@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import axios from '../lib/axios';
-import { use } from 'react';
 
 interface UserStore {
 	user: { name: string; email: string } | null;
