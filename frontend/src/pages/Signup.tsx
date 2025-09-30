@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Container, Paper, CircularProgress } from '@mui/material';
 import { useUserStore } from '../stores/useUserStore';
 import { colors } from '../theme/theme';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
+	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
@@ -14,8 +16,8 @@ const Signup = () => {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log('Form data:', formData);
-		signup(formData.name, formData.email, formData.password);
+		await signup(formData.name, formData.email, formData.password);
+		navigate('/dashboard');
 	};
 
 	return (
