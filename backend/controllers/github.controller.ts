@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import User from '../models/user.model.ts'; // Adjust the import based on your project structure
 
 // Utility function to generate a GitHub App JWT
 const generateGitHubAppToken = (): string => {
@@ -38,9 +39,20 @@ export const githubAppInstall: RequestHandler = (req, res) => {
 // Handle GitHub App installation callback
 export const githubAppCallback: RequestHandler = async (req, res) => {
 	const { code, installation_id, setup_action } = req.query;
+	const userId = req.user?._id; // Assuming userId is available from authentication middleware
 
-	if (!installation_id || !code || !setup_action) {
-		return res.status(400).json({ message: 'Required parameters not provided' });
+	console.log('GitHub App Callback Parameters:', { code, installation_id, setup_action, userId });
+
+	if (!installation_id || !code || !setup_action || !userId) {
+		return res.status(400).json({
+			message: 'Required parameters not provided',
+			missingParameters: {
+				installation_id: !installation_id,
+				code: !code,
+				setup_action: !setup_action,
+				userId: !userId,
+			},
+		});
 	}
 
 	try {
@@ -63,8 +75,14 @@ export const githubAppCallback: RequestHandler = async (req, res) => {
 			},
 		});
 
-		req.app.locals.repositories = reposResponse.data;
-		console.log('Repositories fetched:', req.app.locals.repositories);
+		// Save or update the installation_id in the user's profile
+		const user = await User.findById(userId);
+		if (!user) {
+			return res.status(404).json({ message: 'User not found' });
+		}
+
+		user.githubInstallationId = String(installation_id); // Assuming `githubInstallationId` is a field in the user schema
+		await user.save();
 
 		// Redirect to the dashboard
 		res.redirect(`${process.env.CLIENT_URL}/dashboard`);
@@ -75,12 +93,44 @@ export const githubAppCallback: RequestHandler = async (req, res) => {
 };
 
 // Fetch repositories for a specific installation
-export const getRepositories: RequestHandler = (req, res) => {
-	const repositories = req.app.locals.repositories;
-	if (!repositories) {
-		console.log('No repositories found in app.locals');
-		return res.status(404).json({ message: 'No repositories found' });
+export const getRepositories: RequestHandler = async (req, res) => {
+	const userId = req.user?._id; // Assuming userId is available from authentication middleware
+
+	if (!userId) {
+		return res.status(400).json({ message: 'User ID not provided' });
 	}
-	console.log('Fetched repositories in backend:', repositories);
-	res.json(repositories);
+
+	try {
+		// Retrieve the user's GitHub installation ID from the database
+		const user = await User.findById(userId);
+		if (!user || !user.githubInstallationId) {
+			return res.status(404).json({ message: 'GitHub installation ID not found for user' });
+		}
+
+		const installationId = user.githubInstallationId;
+
+		// Generate a GitHub App JWT
+		const jwtToken = generateGitHubAppToken();
+		const octokit = createOctokitInstance(jwtToken);
+
+		// Generate an installation access token
+		const tokenResponse = await octokit.request('POST /app/installations/{installation_id}/access_tokens', {
+			installation_id: Number(installationId),
+		});
+
+		const accessToken = tokenResponse.data.token;
+
+		// Use the installation access token to fetch repositories
+		const installationOctokit = createOctokitInstance(accessToken);
+		const reposResponse = await installationOctokit.request('GET /installation/repositories', {
+			headers: {
+				'X-GitHub-Api-Version': '2022-11-28',
+			},
+		});
+
+		res.json(reposResponse.data.repositories);
+	} catch (error: any) {
+		console.error('Error fetching repositories:', error);
+		res.status(500).json({ message: 'Failed to fetch repositories', error: error.message });
+	}
 };

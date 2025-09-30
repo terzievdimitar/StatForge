@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import axios from 'axios';
+import axios from '../lib/axios';
 
 interface GithubStore {
 	user: { name: string; email: string } | null;
@@ -29,7 +29,9 @@ export const useGithubStore = create<GithubStore>((set) => ({
 	githubAppCallback: async (code: string, installationId: string) => {
 		set({ loading: true });
 		try {
-			const response = await axios.get(`/api/github/app-callback?code=${code}&installation_id=${installationId}&setup_action=install`);
+			const response = await axios.get(`/github/app-callback?code=${code}&installation_id=${installationId}&setup_action=install`, {
+				withCredentials: true, // Ensure cookies are sent with the request
+			});
 			set({ repositories: response.data.repositories, loading: false });
 		} catch (error) {
 			set({ loading: false });
@@ -41,8 +43,9 @@ export const useGithubStore = create<GithubStore>((set) => ({
 	getRepositories: async () => {
 		set({ loading: true });
 		try {
-			const response = await axios.get('/api/github/repositories');
-			set({ repositories: response.data.repositories, loading: false });
+			const response = await axios.get('/github/repositories');
+			set({ repositories: response.data, loading: false });
+			console.log('Fetched Repositories in frontend:', response.data.repositories);
 		} catch (error) {
 			set({ loading: false });
 			console.error('Failed to fetch repositories:', error);

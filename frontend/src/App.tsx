@@ -7,9 +7,11 @@ import Login from './pages/Login.tsx';
 import Dashboard from './pages/Dashboard.tsx';
 import { useUserStore } from './stores/useUserStore.ts';
 import LoadingSpinner from './components/LoadingSpinner.tsx';
+import { useGithubStore } from './stores/useGithubStore.ts';
 
 function App() {
 	const { user, checkAuth, checkingAuth } = useUserStore();
+	const { getRepositories } = useGithubStore();
 
 	// Check authentication status on app load
 	useEffect(() => {
@@ -18,7 +20,8 @@ function App() {
 
 	useEffect(() => {
 		if (!user) return;
-	}, [user]);
+		getRepositories();
+	}, [getRepositories, user]);
 
 	if (checkingAuth) {
 		return <LoadingSpinner />;
