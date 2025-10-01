@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import axios from '../lib/axios';
+import { redirect } from 'react-router-dom';
 
 interface UserStore {
 	user: { name: string; email: string } | null;
@@ -23,7 +24,6 @@ export const useUserStore = create<UserStore>((set, get) => ({
 			// Send the correct payload structure
 			const response = await axios.post('/auth/signup', { name, email, password });
 			set({ user: response.data, loading: false });
-			console.log('User signed up:', response.data);
 		} catch (error) {
 			set({ loading: false });
 			console.error('Signup error:', error);
@@ -35,7 +35,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
 		try {
 			const response = await axios.post('/auth/login', { email, password });
 			set({ user: response.data, loading: false });
-			console.log('User logged in:', response.data);
+			redirect('/dashboard');
 		} catch (error) {
 			set({ loading: false });
 			console.error('Login error:', error);

@@ -14,7 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 import GavelIcon from '@mui/icons-material/Gavel'; // Changed to an anvil-like icon
 import { useUserStore } from '../stores/useUserStore';
 
-const pages = ['Products', 'Pricing', 'About', 'FAQ'];
+const pages_landing = ['Products', 'Pricing', 'About', 'FAQ'];
+const pages_dashboard = ['Overview', 'Hosting', 'Analytics', 'Development'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -88,13 +89,27 @@ function ResponsiveAppBar() {
 							open={Boolean(anchorElNav)}
 							onClose={handleCloseNavMenu}
 							sx={{ display: { xs: 'block', md: 'none' } }}>
-							{pages.map((page) => (
-								<MenuItem
-									key={page}
-									onClick={handleCloseNavMenu}>
-									<Typography sx={{ textAlign: 'center' }}>{page}</Typography>
-								</MenuItem>
-							))}
+							{user ? (
+								<>
+									{pages_dashboard.map((page) => (
+										<MenuItem
+											key={page}
+											onClick={handleCloseNavMenu}>
+											<Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+										</MenuItem>
+									))}
+								</>
+							) : (
+								<>
+									{pages_landing.map((page) => (
+										<MenuItem
+											key={page}
+											onClick={handleCloseNavMenu}>
+											<Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+										</MenuItem>
+									))}
+								</>
+							)}
 						</Menu>
 					</Box>
 					<GavelIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -116,14 +131,29 @@ function ResponsiveAppBar() {
 						StatForge
 					</Typography>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-						{pages.map((page) => (
-							<Button
-								key={page}
-								onClick={handleCloseNavMenu}
-								sx={{ my: 2, color: 'white', display: 'block' }}>
-								{page}
-							</Button>
-						))}
+						{user ? (
+							<>
+								{pages_dashboard.map((page) => (
+									<Button
+										key={page}
+										onClick={handleCloseNavMenu}
+										sx={{ my: 2, color: 'white', display: 'block' }}>
+										{page}
+									</Button>
+								))}
+							</>
+						) : (
+							<>
+								{pages_landing.map((page) => (
+									<Button
+										key={page}
+										onClick={handleCloseNavMenu}
+										sx={{ my: 2, color: 'white', display: 'block' }}>
+										{page}
+									</Button>
+								))}
+							</>
+						)}
 					</Box>
 					{user ? (
 						<>
