@@ -38,7 +38,7 @@ type Repo = {
 	owner?: { login?: string; avatar_url?: string };
 };
 
-const Dashboard = () => {
+const HostingPage = () => {
 	const {
 		repositories = [],
 		loading,
@@ -328,4 +328,4 @@ const Dashboard = () => {
 	);
 };
 
-export default Dashboard;
+export default HostingPage;
