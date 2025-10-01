@@ -17,7 +17,7 @@ const Signup = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		await signup(formData.name, formData.email, formData.password);
-		navigate('/dashboard');
+		navigate('/dashboard/overview');
 	};
 
 	return (

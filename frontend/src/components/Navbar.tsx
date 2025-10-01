@@ -13,12 +13,14 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import GavelIcon from '@mui/icons-material/Gavel'; // Changed to an anvil-like icon
 import { useUserStore } from '../stores/useUserStore';
+import { useNavigate } from 'react-router-dom';
 
 const pages_landing = ['Products', 'Pricing', 'About', 'FAQ'];
 const pages_dashboard = ['Overview', 'Hosting', 'Analytics', 'Development'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
+	const navigate = useNavigate();
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -31,14 +33,24 @@ function ResponsiveAppBar() {
 		setAnchorElUser(event.currentTarget);
 	};
 
-	const handleCloseNavMenu = () => {
+	const handleCloseNavMenu = (page?: string) => {
 		setAnchorElNav(null);
+		if (page === 'Hosting') {
+			navigate('/dashboard/hosting');
+		}
 	};
 
 	const handleCloseUserMenu = (setting?: string) => {
 		setAnchorElUser(null);
+		if (setting === 'Account') {
+			navigate('/dashboard/account');
+		}
+		if (setting === 'Dashboard') {
+			navigate('/dashboard/overview');
+		}
 		if (setting === 'Logout') {
 			logout();
+			navigate('/');
 		}
 	};
 
@@ -87,14 +99,14 @@ function ResponsiveAppBar() {
 								horizontal: 'left',
 							}}
 							open={Boolean(anchorElNav)}
-							onClose={handleCloseNavMenu}
+							onClose={() => handleCloseNavMenu}
 							sx={{ display: { xs: 'block', md: 'none' } }}>
 							{user ? (
 								<>
 									{pages_dashboard.map((page) => (
 										<MenuItem
 											key={page}
-											onClick={handleCloseNavMenu}>
+											onClick={() => handleCloseNavMenu(page)}>
 											<Typography sx={{ textAlign: 'center' }}>{page}</Typography>
 										</MenuItem>
 									))}
@@ -104,7 +116,7 @@ function ResponsiveAppBar() {
 									{pages_landing.map((page) => (
 										<MenuItem
 											key={page}
-											onClick={handleCloseNavMenu}>
+											onClick={() => handleCloseNavMenu(page)}>
 											<Typography sx={{ textAlign: 'center' }}>{page}</Typography>
 										</MenuItem>
 									))}
@@ -136,7 +148,7 @@ function ResponsiveAppBar() {
 								{pages_dashboard.map((page) => (
 									<Button
 										key={page}
-										onClick={handleCloseNavMenu}
+										onClick={() => handleCloseNavMenu(page)}
 										sx={{ my: 2, color: 'white', display: 'block' }}>
 										{page}
 									</Button>
@@ -147,7 +159,7 @@ function ResponsiveAppBar() {
 								{pages_landing.map((page) => (
 									<Button
 										key={page}
-										onClick={handleCloseNavMenu}
+										onClick={() => handleCloseNavMenu(page)}
 										sx={{ my: 2, color: 'white', display: 'block' }}>
 										{page}
 									</Button>
