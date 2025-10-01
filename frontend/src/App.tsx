@@ -5,6 +5,7 @@ import Navbar from './components/Navbar.tsx';
 import Signup from './pages/Signup.tsx';
 import Login from './pages/Login.tsx';
 import HostingPage from './pages/HostingPage.tsx';
+import ImportRepo from './pages/ImportRepo.tsx';
 import { useUserStore } from './stores/useUserStore.ts';
 import LoadingSpinner from './components/LoadingSpinner.tsx';
 import { useGithubStore } from './stores/useGithubStore.ts';
@@ -45,6 +46,10 @@ function App() {
 				<Route
 					path='/dashboard/hosting'
 					element={user ? <HostingPage /> : <Login />}
+				/>
+				<Route
+					path='/dashboard/import'
+					element={user ? <ImportRepo /> : <Login />}
 				/>
 			</Routes>
 		</>

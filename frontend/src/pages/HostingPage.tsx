@@ -26,7 +26,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import PersonIcon from '@mui/icons-material/Person';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useGithubStore } from '../stores/useGithubStore';
 
 type Repo = {
@@ -47,6 +47,7 @@ const HostingPage = () => {
 		getRepositories,
 		// optional: logoutGithub,
 	} = useGithubStore();
+	const navigate = useNavigate();
 
 	const [searchParams] = useSearchParams();
 	const [query, setQuery] = useState('');
@@ -95,7 +96,7 @@ const HostingPage = () => {
 	}, [repositories, query]);
 
 	const handleImport = (repo: Repo) => {
-		console.log('Import →', repo);
+		navigate('/dashboard/import', { state: { repo } }); // Pass repository details to /import page
 	};
 
 	return (
@@ -163,10 +164,10 @@ const HostingPage = () => {
 											borderRadius: 1,
 											justifyContent: 'flex-start',
 											textTransform: 'none',
-											borderColor: 'divider',
+											borderColor: 'text.secondary',
 											color: 'text.primary',
 											bgcolor: 'transparent',
-											'&:hover': { borderColor: 'divider', bgcolor: 'action.hover' },
+											'&:hover': { borderColor: 'text.secondary', bgcolor: 'action.hover' },
 										}}>
 										{owner || 'owner'}
 									</Button>
@@ -232,10 +233,11 @@ const HostingPage = () => {
 							<Box
 								sx={{
 									border: '1px solid',
-									borderColor: 'divider',
+									borderColor: 'text.secondary',
 									borderRadius: 1,
 									overflow: 'hidden',
 									bgcolor: 'background.default',
+									padding: 1,
 								}}>
 								{loading && repositories.length === 0 ? (
 									<Stack
@@ -264,7 +266,7 @@ const HostingPage = () => {
 											filtered.map((repo, idx) => (
 												<Box key={repo.id}>
 													<ListItem
-														sx={{ px: 2, py: 1.25 }}
+														sx={{ px: 2, py: 2 }}
 														secondaryAction={
 															<Button
 																variant='contained'
@@ -313,7 +315,7 @@ const HostingPage = () => {
 															secondary={null}
 														/>
 													</ListItem>
-													{idx < filtered.length - 1 && <Divider />}
+													{idx < filtered.length - 1 && <Divider sx={{ borderColor: 'text.secondary' }} />}
 												</Box>
 											))
 										)}
