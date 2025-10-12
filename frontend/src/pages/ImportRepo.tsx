@@ -5,6 +5,7 @@ import ViteIcon from '../../public/icons/vite.svg';
 import NextJsIcon from '../../public/icons/nextjs.svg';
 import VueIcon from '../../public/icons/vue.svg';
 import RemoveIcon from '@mui/icons-material/Remove';
+import useDeploymentStore from '../stores/useDeploymentStore';
 
 const ImportRepo = () => {
 	const location = useLocation();
@@ -18,6 +19,8 @@ const ImportRepo = () => {
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [envSettingsOpen, setEnvSettingsOpen] = useState(false);
 	const [envVariables, setEnvVariables] = useState([{ key: '', value: '' }]);
+
+	const { deployRepository, isDeploying, deploymentError } = useDeploymentStore();
 
 	const toggleSettings = () => setSettingsOpen((prev) => !prev);
 
@@ -291,9 +294,30 @@ const ImportRepo = () => {
 						<Button
 							variant='contained'
 							color='primary'
-							sx={{ mt: 2 }}>
-							Deploy
+							sx={{ mt: 2 }}
+							onClick={() =>
+								deployRepository(
+									repo.owner?.login || repo.owner, // Ensure owner is a string
+									repo.name,
+									framework,
+									buildCommand,
+									outputDirectory,
+									installCommand,
+									envVariables
+								)
+							}
+							disabled={isDeploying}>
+							{isDeploying ? 'Deploying...' : 'Deploy'}
 						</Button>
+
+						{deploymentError && (
+							<Typography
+								variant='body2'
+								color='error'
+								sx={{ mt: 1 }}>
+								{deploymentError}
+							</Typography>
+						)}
 					</Stack>
 				</Box>
 			) : (
