@@ -6,6 +6,7 @@ import WhyChooseUs from '../components/WhyChooseUs';
 import TrustedBy from '../components/TrustedBy';
 import SplitFeature from '../components/SplitFeature';
 import FAQ from '../components/FAQ';
+import CallToAction from '../components/CallToAction';
 
 const LandingPage = () => {
 	return (
@@ -79,6 +80,9 @@ const LandingPage = () => {
 
 				{/* FAQ Section */}
 				<FAQ />
+
+				{/* Call to Action Section */}
+				<CallToAction />
 			</Container>
 		</Box>
 	);
