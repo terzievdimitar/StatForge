@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import StatForgeLogo from '../../public/icons/statforge-logo-light.svg';
+import HideOnScroll from './HideOnScroll';
 import { useUserStore } from '../stores/useUserStore';
 import { useNavigate } from 'react-router-dom';
 
@@ -55,161 +56,168 @@ function ResponsiveAppBar() {
 	};
 
 	return (
-		<AppBar position='static'>
-			<Container maxWidth='xl'>
-				<Toolbar disableGutters>
-					<Box
-						component='a'
-						href='/'
-						sx={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
-						<Box
-							component='img'
-							src={StatForgeLogo}
-							alt='StatForge Logo'
-							sx={{ mr: 1, width: 60, height: 60 }}
-						/>
-					</Box>
+		<>
+			<HideOnScroll>
+				<AppBar position='fixed'>
+					<Container maxWidth='xl'>
+						<Toolbar disableGutters>
+							<Box
+								component='a'
+								href='/'
+								sx={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
+								<Box
+									component='img'
+									src={StatForgeLogo}
+									alt='StatForge Logo'
+									sx={{ mr: 1, width: 60, height: 60 }}
+								/>
+							</Box>
 
-					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-						<IconButton
-							size='large'
-							aria-label='account of current user'
-							aria-controls='menu-appbar'
-							aria-haspopup='true'
-							onClick={handleOpenNavMenu}
-							color='inherit'>
-							<MenuIcon />
-						</IconButton>
-						<Menu
-							id='menu-appbar'
-							anchorEl={anchorElNav}
-							anchorOrigin={{
-								vertical: 'bottom',
-								horizontal: 'left',
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: 'top',
-								horizontal: 'left',
-							}}
-							open={Boolean(anchorElNav)}
-							onClose={() => handleCloseNavMenu}
-							sx={{ display: { xs: 'block', md: 'none' } }}>
-							{user ? (
-								<>
-									{pages_dashboard.map((page) => (
-										<MenuItem
-											key={page}
-											onClick={() => handleCloseNavMenu(page)}>
-											<Typography sx={{ textAlign: 'center' }}>{page}</Typography>
-										</MenuItem>
-									))}
-								</>
-							) : (
-								<>
-									{pages_landing.map((page) => (
-										<MenuItem
-											key={page}
-											onClick={() => handleCloseNavMenu(page)}>
-											<Typography sx={{ textAlign: 'center' }}>{page}</Typography>
-										</MenuItem>
-									))}
-								</>
-							)}
-						</Menu>
-					</Box>
-					<Box
-						component='a'
-						href='/'
-						sx={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
-						<Box
-							component='img'
-							src={StatForgeLogo}
-							alt='StatForge Logo'
-							sx={{ display: 'none', mr: 1 }}
-						/>
-					</Box>
-					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-						{user ? (
-							<>
-								{pages_dashboard.map((page) => (
-									<Button
-										key={page}
-										onClick={() => handleCloseNavMenu(page)}
-										sx={{ my: 2, color: 'white', display: 'block' }}>
-										{page}
-									</Button>
-								))}
-							</>
-						) : (
-							<>
-								{pages_landing.map((page) => (
-									<Button
-										key={page}
-										onClick={() => handleCloseNavMenu(page)}
-										sx={{ my: 2, color: 'white', display: 'block' }}>
-										{page}
-									</Button>
-								))}
-							</>
-						)}
-					</Box>
-					{user ? (
-						<>
-							<Box sx={{ flexGrow: 0 }}>
-								<Tooltip title='Open settings'>
-									<IconButton
-										onClick={handleOpenUserMenu}
-										sx={{ p: 0 }}>
-										<Avatar />
-									</IconButton>
-								</Tooltip>
+							<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+								<IconButton
+									size='large'
+									aria-label='account of current user'
+									aria-controls='menu-appbar'
+									aria-haspopup='true'
+									onClick={handleOpenNavMenu}
+									color='inherit'>
+									<MenuIcon />
+								</IconButton>
 								<Menu
-									sx={{ mt: '45px' }}
 									id='menu-appbar'
-									anchorEl={anchorElUser}
+									anchorEl={anchorElNav}
 									anchorOrigin={{
-										vertical: 'top',
-										horizontal: 'right',
+										vertical: 'bottom',
+										horizontal: 'left',
 									}}
 									keepMounted
 									transformOrigin={{
 										vertical: 'top',
-										horizontal: 'right',
+										horizontal: 'left',
 									}}
-									open={Boolean(anchorElUser)}
-									onClose={() => handleCloseUserMenu()}>
-									{settings.map((setting) => (
-										<MenuItem
-											key={setting}
-											onClick={() => handleCloseUserMenu(setting)}>
-											<Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
-										</MenuItem>
-									))}
+									open={Boolean(anchorElNav)}
+									onClose={() => handleCloseNavMenu()}
+									sx={{ display: { xs: 'block', md: 'none' } }}>
+									{user ? (
+										<>
+											{pages_dashboard.map((page) => (
+												<MenuItem
+													key={page}
+													onClick={() => handleCloseNavMenu(page)}>
+													<Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+												</MenuItem>
+											))}
+										</>
+									) : (
+										<>
+											{pages_landing.map((page) => (
+												<MenuItem
+													key={page}
+													onClick={() => handleCloseNavMenu(page)}>
+													<Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+												</MenuItem>
+											))}
+										</>
+									)}
 								</Menu>
 							</Box>
-						</>
-					) : (
-						<>
-							<Button
-								variant='outlined'
-								color='inherit'
-								href='/login'
-								sx={{ mx: 1 }}>
-								Login
-							</Button>
-							<Button
-								variant='contained'
-								color='secondary'
-								href='/signup'
-								sx={{ mx: 1 }}>
-								Signup
-							</Button>
-						</>
-					)}
-				</Toolbar>
-			</Container>
-		</AppBar>
+							<Box
+								component='a'
+								href='/'
+								sx={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
+								<Box
+									component='img'
+									src={StatForgeLogo}
+									alt='StatForge Logo'
+									sx={{ display: 'none', mr: 1 }}
+								/>
+							</Box>
+							<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+								{user ? (
+									<>
+										{pages_dashboard.map((page) => (
+											<Button
+												key={page}
+												onClick={() => handleCloseNavMenu(page)}
+												sx={{ my: 2, color: 'white', display: 'block' }}>
+												{page}
+											</Button>
+										))}
+									</>
+								) : (
+									<>
+										{pages_landing.map((page) => (
+											<Button
+												key={page}
+												onClick={() => handleCloseNavMenu(page)}
+												sx={{ my: 2, color: 'white', display: 'block' }}>
+												{page}
+											</Button>
+										))}
+									</>
+								)}
+							</Box>
+							{user ? (
+								<>
+									<Box sx={{ flexGrow: 0 }}>
+										<Tooltip title='Open settings'>
+											<IconButton
+												onClick={handleOpenUserMenu}
+												sx={{ p: 0 }}>
+												<Avatar />
+											</IconButton>
+										</Tooltip>
+										<Menu
+											sx={{ mt: '45px' }}
+											id='menu-appbar'
+											anchorEl={anchorElUser}
+											anchorOrigin={{
+												vertical: 'top',
+												horizontal: 'right',
+											}}
+											keepMounted
+											transformOrigin={{
+												vertical: 'top',
+												horizontal: 'right',
+											}}
+											open={Boolean(anchorElUser)}
+											onClose={() => handleCloseUserMenu()}>
+											{settings.map((setting) => (
+												<MenuItem
+													key={setting}
+													onClick={() => handleCloseUserMenu(setting)}>
+													<Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+												</MenuItem>
+											))}
+										</Menu>
+									</Box>
+								</>
+							) : (
+								<>
+									<Button
+										variant='outlined'
+										color='inherit'
+										href='/login'
+										sx={{ mx: 1 }}>
+										Login
+									</Button>
+									<Button
+										variant='contained'
+										color='secondary'
+										href='/signup'
+										sx={{ mx: 1 }}>
+										Signup
+									</Button>
+								</>
+							)}
+						</Toolbar>
+					</Container>
+				</AppBar>
+			</HideOnScroll>
+
+			{/* spacer so page content doesn't jump under the fixed AppBar */}
+			<Toolbar />
+		</>
 	);
 }
 export default ResponsiveAppBar;

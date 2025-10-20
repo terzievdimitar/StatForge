@@ -113,12 +113,6 @@ const Footer: React.FC = () => {
 								sx={{ color: 'text.secondary' }}>
 								Submit Bugs
 							</Link>
-							<Link
-								href='#'
-								underline='none'
-								sx={{ color: 'text.secondary' }}>
-								Contact Us
-							</Link>
 						</Box>
 					</Grid>
 
