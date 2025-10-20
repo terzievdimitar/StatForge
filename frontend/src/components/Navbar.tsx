@@ -11,7 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import GavelIcon from '@mui/icons-material/Gavel'; // Changed to an anvil-like icon
+import StatForgeLogo from '../../public/icons/statforge-logo-light.svg';
 import { useUserStore } from '../stores/useUserStore';
 import { useNavigate } from 'react-router-dom';
 
@@ -58,23 +58,17 @@ function ResponsiveAppBar() {
 		<AppBar position='static'>
 			<Container maxWidth='xl'>
 				<Toolbar disableGutters>
-					<GavelIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-					<Typography
-						variant='h6'
-						noWrap
+					<Box
 						component='a'
 						href='/'
-						sx={{
-							mr: 2,
-							display: { xs: 'none', md: 'flex' },
-							fontFamily: 'monospace',
-							fontWeight: 700,
-							letterSpacing: '.3rem',
-							color: 'inherit',
-							textDecoration: 'none',
-						}}>
-						StatForge
-					</Typography>
+						sx={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
+						<Box
+							component='img'
+							src={StatForgeLogo}
+							alt='StatForge Logo'
+							sx={{ mr: 1, width: 60, height: 60 }}
+						/>
+					</Box>
 
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 						<IconButton
@@ -124,24 +118,17 @@ function ResponsiveAppBar() {
 							)}
 						</Menu>
 					</Box>
-					<GavelIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-					<Typography
-						variant='h5'
-						noWrap
+					<Box
 						component='a'
-						href='#app-bar-with-responsive-menu'
-						sx={{
-							mr: 2,
-							display: { xs: 'flex', md: 'none' },
-							flexGrow: 1,
-							fontFamily: 'monospace',
-							fontWeight: 700,
-							letterSpacing: '.3rem',
-							color: 'inherit',
-							textDecoration: 'none',
-						}}>
-						StatForge
-					</Typography>
+						href='/'
+						sx={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
+						<Box
+							component='img'
+							src={StatForgeLogo}
+							alt='StatForge Logo'
+							sx={{ display: 'none', mr: 1 }}
+						/>
+					</Box>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 						{user ? (
 							<>
