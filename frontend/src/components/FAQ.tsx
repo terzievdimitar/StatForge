@@ -27,11 +27,13 @@ const faqData = [
 
 const FAQ: React.FC = () => {
 	return (
-		<Box sx={{ py: 8 }}>
+		<Box
+			sx={{ py: 8 }}
+			id='faq'>
 			<Box sx={{ maxWidth: 900, mx: 'auto', textAlign: 'center', px: 2 }}>
 				<Typography
 					variant='overline'
-					sx={{ color: 'primary.main', mb: 2 }}>
+					sx={{ color: 'primary.main', mb: 2, fontSize: 18 }}>
 					GET YOUR QUESTIONS ANSWERED
 				</Typography>
 

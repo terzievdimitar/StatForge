@@ -62,25 +62,25 @@ const Footer: React.FC = () => {
 						</Typography>
 						<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
 							<Link
-								href='#'
+								href='/#products'
 								underline='none'
 								sx={{ color: 'text.secondary' }}>
-								Features
+								Products
 							</Link>
 							<Link
-								href='#'
+								href='/pricing'
 								underline='none'
 								sx={{ color: 'text.secondary' }}>
 								Pricing
 							</Link>
 							<Link
-								href='#'
+								href='/about'
 								underline='none'
 								sx={{ color: 'text.secondary' }}>
-								Blog
+								About
 							</Link>
 							<Link
-								href='#'
+								href='/#faq'
 								underline='none'
 								sx={{ color: 'text.secondary' }}>
 								FAQ

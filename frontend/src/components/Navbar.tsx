@@ -36,6 +36,23 @@ function ResponsiveAppBar() {
 
 	const handleCloseNavMenu = (page?: string) => {
 		setAnchorElNav(null);
+		// User Not Logged In Navigation
+		if (!user) {
+			if (page === 'Products') {
+				navigate('/#products');
+			}
+			if (page === 'Pricing') {
+				navigate('/pricing');
+			}
+			if (page === 'About') {
+				navigate('/about');
+			}
+			if (page === 'FAQ') {
+				navigate('/#faq');
+			}
+		}
+
+		// User Logged In Navigation
 		if (page === 'Hosting') {
 			navigate('/dashboard/hosting');
 		}

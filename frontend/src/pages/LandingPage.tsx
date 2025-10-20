@@ -1,4 +1,6 @@
 import { Box } from '@mui/material';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import { colors } from '../theme/theme';
 import Hero from '../components/Hero';
@@ -10,6 +12,21 @@ import CallToAction from '../components/CallToAction';
 import Footer from '../components/Footer';
 
 const LandingPage = () => {
+	const location = useLocation();
+
+	useEffect(() => {
+		// When navigated to with a hash (e.g. /#features or /#faq), scroll to the element accounting for fixed AppBar
+		if (location.hash) {
+			const id = location.hash.replace('#', '');
+			const el = document.getElementById(id);
+			if (el) {
+				const toolbar = document.querySelector('.MuiToolbar-root') as HTMLElement | null;
+				const offset = toolbar ? toolbar.offsetHeight : 64;
+				const top = el.getBoundingClientRect().top + window.pageYOffset - offset - 16;
+				window.scrollTo({ top, behavior: 'smooth' });
+			}
+		}
+	}, [location]);
 	return (
 		<Box
 			sx={{
@@ -42,6 +59,7 @@ const LandingPage = () => {
 			<Container sx={{ py: { xs: 10, md: 12 }, position: 'relative' }}>
 				{/* Why choose us section */}
 				<WhyChooseUs />
+				<Box id='products'></Box>
 				<SplitFeature
 					eyebrow='HOSTING'
 					title={<>Reliable Web Hosting</>}
