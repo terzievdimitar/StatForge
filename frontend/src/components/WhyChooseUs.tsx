@@ -5,10 +5,11 @@ import FeatureCard from './FeatureCard';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import { alpha } from '@mui/material/styles';
 
 const WhyChooseUs: React.FC = () => {
 	return (
-		<Box sx={{ mt: 10, mb: 12 }}>
+		<Box>
 			<Typography
 				align='center'
 				variant='overline'
@@ -36,30 +37,49 @@ const WhyChooseUs: React.FC = () => {
 					display: 'grid',
 					gap: 4,
 					gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+					gridAutoRows: '1fr',
 				}}>
-				<Box>
+				<Box sx={{ height: '100%' }}>
 					<FeatureCard
 						icon={<AutoFixHighIcon sx={{ fontSize: 44, bgcolor: 'primary.main', color: '#fff', borderRadius: 1, p: 1 }} />}
 						title='Customizable'>
-						Tailor your landing page's look and feel, from the color scheme to the font size, to the design of the page.
+						Our developers customize layouts, styles, and interactions to match your brand and product requirements — we implement the
+						design so you don't have to.
 					</FeatureCard>
 				</Box>
 
-				<Box>
+				<Box sx={{ height: '100%' }}>
 					<FeatureCard
 						icon={<ElectricBoltIcon sx={{ fontSize: 44, bgcolor: 'primary.main', color: '#fff', borderRadius: 1, p: 1 }} />}
 						title='Fast Performance'>
-						We build our templates for speed in mind, for super-fast load times so your customers never waver.
+						Our team optimizes performance and implements best practices for fast load times, caching and reliability so your users have
+						a smooth experience.
 					</FeatureCard>
 				</Box>
 
-				<Box>
+				<Box sx={{ height: '100%' }}>
 					<FeatureCard
 						icon={<RocketLaunchIcon sx={{ fontSize: 44, bgcolor: 'primary.main', color: '#fff', borderRadius: 1, p: 1 }} />}
 						title='Fully Featured'>
 						Everything you need to succeed and launch your landing page, right out of the box. No need to install anything else.
 					</FeatureCard>
 				</Box>
+			</Box>
+
+			{/* Decorative gradient at the end of the section (full-bleed) */}
+			<Box sx={{ width: '100vw', position: 'relative', left: '50%', ml: '-50vw' }}>
+				<Box
+					aria-hidden
+					sx={(theme) => ({
+						mt: 2,
+						height: { xs: 60, md: 120 },
+						width: '100%',
+						background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, ${alpha(theme.palette.secondary.main, 0.12)} 45%, ${alpha(
+							theme.palette.primary.main,
+							0.8
+						)} 100%)`,
+					})}
+				/>
 			</Box>
 		</Box>
 	);

@@ -3,6 +3,7 @@ import Container from '@mui/material/Container';
 import { colors } from '../theme/theme';
 import Hero from '../components/Hero';
 import WhyChooseUs from '../components/WhyChooseUs';
+import TrustedBy from '../components/TrustedBy';
 
 const LandingPage = () => {
 	return (
@@ -27,10 +28,14 @@ const LandingPage = () => {
 				}}
 			/>
 
-			<Container
-				maxWidth='lg'
-				sx={{ py: { xs: 10, md: 16 }, position: 'relative' }}>
+			<Container sx={{ py: { xs: 10, md: 16 }, position: 'relative' }}>
 				<Hero />
+			</Container>
+
+			{/* Full-bleed trusted logos */}
+			<TrustedBy />
+
+			<Container sx={{ py: { xs: 10, md: 12 }, position: 'relative' }}>
 				{/* Why choose us section */}
 				<WhyChooseUs />
 			</Container>

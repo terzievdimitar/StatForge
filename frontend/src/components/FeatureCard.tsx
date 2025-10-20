@@ -18,7 +18,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, children }) => {
 				border: '1px solid rgba(255,255,255,0.03)',
 				borderRadius: 2,
 				p: 6,
-				minHeight: 260,
+				height: '100%',
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
