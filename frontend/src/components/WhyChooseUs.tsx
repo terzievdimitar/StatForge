@@ -71,12 +71,11 @@ const WhyChooseUs: React.FC = () => {
 				<Box
 					aria-hidden
 					sx={(theme) => ({
-						mt: 2,
 						height: { xs: 60, md: 120 },
 						width: '100%',
 						background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, ${alpha(theme.palette.secondary.main, 0.12)} 45%, ${alpha(
 							theme.palette.primary.main,
-							0.8
+							0.7
 						)} 100%)`,
 					})}
 				/>

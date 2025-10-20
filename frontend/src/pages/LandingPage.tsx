@@ -4,6 +4,7 @@ import { colors } from '../theme/theme';
 import Hero from '../components/Hero';
 import WhyChooseUs from '../components/WhyChooseUs';
 import TrustedBy from '../components/TrustedBy';
+import SplitFeature from '../components/SplitFeature';
 
 const LandingPage = () => {
 	return (
@@ -38,6 +39,42 @@ const LandingPage = () => {
 			<Container sx={{ py: { xs: 10, md: 12 }, position: 'relative' }}>
 				{/* Why choose us section */}
 				<WhyChooseUs />
+				<SplitFeature
+					eyebrow='HOSTING'
+					title={<>Reliable Web Hosting</>}
+					description={
+						<>
+							We provision and manage fast, secure hosting for your sites — global CDN, automatic SSL, backups and scaling so your
+							product stays reliable under load.
+						</>
+					}
+					chips={['Global CDN', 'Automatic SSL', 'Backups & Restore', 'Autoscaling']}
+				/>
+
+				<SplitFeature
+					reverse
+					eyebrow='DEVELOPMENT'
+					title={<>Custom Development Services</>}
+					description={
+						<>
+							Our engineering team builds and integrates the custom features you need: from frontend UIs to backend APIs and CI/CD
+							pipelines that deploy automatically.
+						</>
+					}
+					chips={['Frontend & Backend', 'CI/CD Pipelines', 'Third‑party Integrations']}
+				/>
+
+				<SplitFeature
+					eyebrow='ANALYTICS'
+					title={<>Product Analytics & Insights</>}
+					description={
+						<>
+							We integrate analytics, dashboards and monitoring to surface user behaviour and performance metrics so you can make
+							informed decisions.
+						</>
+					}
+					chips={['Event Tracking', 'Dashboards', 'Performance Monitoring', 'A/B Experiments']}
+				/>
 			</Container>
 		</Box>
 	);
