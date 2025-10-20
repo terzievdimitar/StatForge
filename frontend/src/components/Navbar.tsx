@@ -46,6 +46,7 @@ function ResponsiveAppBar() {
 			}
 			if (page === 'About') {
 				navigate('/about');
+				window.location.reload();
 			}
 			if (page === 'FAQ') {
 				navigate('/#faq');

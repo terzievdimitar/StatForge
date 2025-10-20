@@ -6,9 +6,9 @@ import { alpha } from '@mui/material/styles';
 
 const CallToAction: React.FC = () => {
 	return (
-		<Box sx={{ width: '100%', px: 6, my: 6 }}>
+		<Box sx={{ width: '100%', my: 6 }}>
 			{/* keep full-bleed on wide screens but add small horizontal padding on xs so it doesn't touch the viewport */}
-			<Box sx={{ width: '100vw', position: 'relative', left: '50%', ml: '-50vw' }}>
+			<Box sx={{ width: '100vw', position: 'relative', left: '50%', transform: 'translateX(-50%)' }}>
 				<Box sx={{ px: { xs: 2, sm: 4, md: 0 } }}>
 					<Box
 						sx={(theme) => ({
