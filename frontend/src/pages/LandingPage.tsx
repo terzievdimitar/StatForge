@@ -5,6 +5,7 @@ import Hero from '../components/Hero';
 import WhyChooseUs from '../components/WhyChooseUs';
 import TrustedBy from '../components/TrustedBy';
 import SplitFeature from '../components/SplitFeature';
+import FAQ from '../components/FAQ';
 
 const LandingPage = () => {
 	return (
@@ -75,6 +76,9 @@ const LandingPage = () => {
 					}
 					chips={['Event Tracking', 'Dashboards', 'Performance Monitoring', 'A/B Experiments']}
 				/>
+
+				{/* FAQ Section */}
+				<FAQ />
 			</Container>
 		</Box>
 	);

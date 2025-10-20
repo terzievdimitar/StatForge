@@ -14,7 +14,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, children }) => {
 		<Paper
 			elevation={0}
 			sx={{
-				bgcolor: 'rgba(255,255,255,0.02)',
+				bgcolor: 'secondary.main',
 				border: '1px solid rgba(255,255,255,0.03)',
 				borderRadius: 2,
 				p: 6,
