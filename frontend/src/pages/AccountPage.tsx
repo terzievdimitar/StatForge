@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import {
 	Box,
 	Button,
@@ -59,22 +59,23 @@ function a11yProps(index: number) {
 }
 
 export default function AccountPage() {
-	const [value, setValue] = React.useState(0);
-	const [email, setEmail] = React.useState('');
-	const [updateOpen, setUpdateOpen] = React.useState(false);
-	const [updateEmail, setUpdateEmail] = React.useState('');
+	const [value, setValue] = useState(0);
+	const [email, setEmail] = useState('');
+	const [updateOpen, setUpdateOpen] = useState(false);
+	const [updateEmail, setUpdateEmail] = useState('');
+	const [deleting, setDeleting] = useState(false);
 
 	// saving & snackbar state for email updates
-	const [savingEmail, setSavingEmail] = React.useState(false);
-	const [snackbar, setSnackbar] = React.useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
+	const [savingEmail, setSavingEmail] = useState(false);
+	const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
 		open: false,
 		message: '',
 		severity: 'success',
 	});
 
-	const { user, checkAuth, logout } = useUserStore();
+	const { user, logout } = useUserStore();
 	const navigate = useNavigate();
-	const [deleteOpen, setDeleteOpen] = React.useState(false);
+	const [deleteOpen, setDeleteOpen] = useState(false);
 
 	// Placeholder billing data
 	const subscriptions = [
@@ -124,15 +125,25 @@ export default function AccountPage() {
 	const handleOpenDelete = () => setDeleteOpen(true);
 	const handleCloseDelete = () => setDeleteOpen(false);
 	const handleConfirmDelete = async () => {
+		setDeleting(true);
 		try {
-			// Call backend delete endpoint (implement server-side). Using '/auth' DELETE as placeholder.
-			await axios.delete('/auth');
-			// logout locally and redirect
-			await logout();
+			// call protected backend endpoint
+			await axios.delete('/auth/delete');
+
+			// optionally: server may already clear cookies and return 200
+			// make sure the client clears local user state
+			useUserStore.setState({ user: null });
+
+			// show success snackbar, then redirect
+			setSnackbar({ open: true, message: 'Account deleted', severity: 'success' });
 			navigate('/');
-		} catch (err) {
+		} catch (err: any) {
+			// show server-provided message if available
+			const msg = err?.response?.data?.message ?? 'Failed to delete account';
 			console.error('Failed to delete account', err);
+			setSnackbar({ open: true, message: msg, severity: 'error' });
 		} finally {
+			setDeleting(false);
 			setDeleteOpen(false);
 		}
 	};
@@ -142,7 +153,7 @@ export default function AccountPage() {
 		setSnackbar((s) => ({ ...s, open: false }));
 	};
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (user?.email) setEmail(user.email);
 	}, [user]);
 
@@ -267,7 +278,7 @@ export default function AccountPage() {
 						</Typography>
 						<List>
 							{invoices.map((inv) => (
-								<React.Fragment key={inv.id}>
+								<Fragment key={inv.id}>
 									<ListItem
 										secondaryAction={
 											<Button
@@ -282,7 +293,7 @@ export default function AccountPage() {
 										/>
 									</ListItem>
 									<Divider />
-								</React.Fragment>
+								</Fragment>
 							))}
 						</List>
 					</Paper>
@@ -405,8 +416,9 @@ export default function AccountPage() {
 						<Button onClick={handleCloseDelete}>Cancel</Button>
 						<Button
 							color='error'
-							onClick={handleConfirmDelete}>
-							Delete account
+							onClick={() => handleConfirmDelete()}
+							disabled={deleting}>
+							{deleting ? 'Deleting...' : 'Delete account'}
 						</Button>
 					</DialogActions>
 				</Dialog>

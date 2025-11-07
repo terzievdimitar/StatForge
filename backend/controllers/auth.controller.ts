@@ -98,6 +98,35 @@ export const logout: RequestHandler = async (req: Request, res: Response) => {
 	}
 };
 
+export const deleteAccount: RequestHandler = async (req: Request, res: Response) => {
+	try {
+		const userId = req.user?._id;
+
+		if (!userId) {
+			return res.status(400).json({ message: 'User ID not provided' });
+		}
+
+		// remove refresh token from redis if present
+		try {
+			await redis.del(`refreshToken:${userId}`);
+		} catch (redisErr) {
+			console.warn('Failed to remove refresh token from redis:', redisErr);
+		}
+
+		// delete user record
+		await User.findByIdAndDelete(userId);
+
+		// Clear cookies (ensure proper flags if necessary)
+		res.clearCookie('accessToken');
+		res.clearCookie('refreshToken');
+
+		res.status(200).json({ message: 'Account deleted successfully' });
+	} catch (error) {
+		console.log('Error deleting account:', error);
+		res.status(500).json({ message: 'Server error', error });
+	}
+};
+
 // Update Email
 export const updateEmail: RequestHandler = async (req: Request, res: Response) => {
 	try {
