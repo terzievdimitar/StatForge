@@ -11,6 +11,7 @@ import { useGithubStore } from './stores/useGithubStore.ts';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme/theme.ts';
 import AboutPage from './pages/AboutPage.tsx';
+import DashboardOverview from './pages/DashboardOverview.tsx';
 
 function App() {
 	const { user, checkAuth, checkingAuth } = useUserStore();
@@ -49,9 +50,14 @@ function App() {
 					path='/about'
 					element={!user ? <AboutPage /> : <HostingPage />}
 				/>
+				{/* Dashboard routes */}
 				<Route
 					path='/dashboard/hosting'
 					element={user ? <HostingPage /> : <Login />}
+				/>
+				<Route
+					path='/dashboard/overview'
+					element={user ? <DashboardOverview /> : <Login />}
 				/>
 			</Routes>
 		</ThemeProvider>

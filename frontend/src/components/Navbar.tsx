@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 
 const pages_landing = ['Products', 'Pricing', 'About', 'FAQ'];
 const pages_dashboard = ['Overview', 'Hosting', 'Analytics', 'Development'];
-const settings = ['Account', 'Dashboard', 'Logout'];
+const settings = ['Account', 'Logout'];
 
 function ResponsiveAppBar() {
 	const navigate = useNavigate();
@@ -46,7 +46,6 @@ function ResponsiveAppBar() {
 			}
 			if (page === 'About') {
 				navigate('/about');
-				window.location.reload();
 			}
 			if (page === 'FAQ') {
 				navigate('/#faq');
@@ -54,8 +53,17 @@ function ResponsiveAppBar() {
 		}
 
 		// User Logged In Navigation
+		if (page === 'Overview') {
+			navigate('/dashboard/overview');
+		}
 		if (page === 'Hosting') {
 			navigate('/dashboard/hosting');
+		}
+		if (page === 'Analytics') {
+			navigate('/dashboard/analytics');
+		}
+		if (page === 'Development') {
+			navigate('/dashboard/development');
 		}
 	};
 

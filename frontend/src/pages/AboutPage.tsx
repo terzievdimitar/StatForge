@@ -20,7 +20,7 @@ const values = [
 	{ title: 'Transparency', desc: 'Clear pricing, honest communication and measurable SLAs.' },
 ];
 
-function AboutPage() {
+const AboutPage = () => {
 	return (
 		<Box sx={{ bgcolor: 'background.default', color: 'text.primary', minHeight: '100vh', overflowX: 'hidden' }}>
 			{/* Hero */}
@@ -184,6 +184,6 @@ function AboutPage() {
 			<Footer />
 		</Box>
 	);
-}
+};
 
 export default AboutPage;
