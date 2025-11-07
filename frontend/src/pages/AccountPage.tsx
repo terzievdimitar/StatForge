@@ -22,6 +22,8 @@ import {
 	TableRow,
 	TableCell,
 	TableContainer,
+	Snackbar,
+	Alert,
 } from '@mui/material';
 import Container from '@mui/material/Container';
 import axios from '../lib/axios';
@@ -62,6 +64,14 @@ export default function AccountPage() {
 	const [updateOpen, setUpdateOpen] = React.useState(false);
 	const [updateEmail, setUpdateEmail] = React.useState('');
 
+	// saving & snackbar state for email updates
+	const [savingEmail, setSavingEmail] = React.useState(false);
+	const [snackbar, setSnackbar] = React.useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
+		open: false,
+		message: '',
+		severity: 'success',
+	});
+
 	const { user, checkAuth, logout } = useUserStore();
 	const navigate = useNavigate();
 	const [deleteOpen, setDeleteOpen] = React.useState(false);
@@ -82,17 +92,32 @@ export default function AccountPage() {
 		setValue(newValue);
 	};
 
-	const handleSaveEmail = async (newEmail?: string) => {
-		// if called from inline (no dialog) use current email state
-		const targetEmail = newEmail ?? updateEmail ?? email;
+	const handleSaveEmail = async (newEmailParam?: string) => {
+		const targetEmail = newEmailParam ?? updateEmail ?? email;
+
+		// basic validation
+		const emailIsValid = typeof targetEmail === 'string' && /^\S+@\S+\.\S+$/.test(targetEmail);
+		if (!emailIsValid) {
+			setSnackbar({ open: true, message: 'Invalid email format', severity: 'error' });
+			console.error('Invalid email:', targetEmail);
+			return;
+		}
+
 		try {
-			// Call backend endpoint to update email. Endpoint should validate and return updated user profile.
-			await axios.patch('/auth/email', { email: targetEmail });
-			// refresh user profile
-			await checkAuth();
+			setSavingEmail(true);
+			// send payload key the server expects
+			await axios.put('/auth/update-email', { newEmail: targetEmail });
+			// reset/close UI
 			setUpdateOpen(false);
+			setUpdateEmail(''); // clear input
+			useUserStore.setState({ user: { ...user!, email: targetEmail } });
+			// show success snackbar
+			setSnackbar({ open: true, message: 'Email updated', severity: 'success' });
 		} catch (err) {
 			console.error('Failed to update email', err);
+			setSnackbar({ open: true, message: 'Failed to update email', severity: 'error' });
+		} finally {
+			setSavingEmail(false);
 		}
 	};
 
@@ -110,6 +135,11 @@ export default function AccountPage() {
 		} finally {
 			setDeleteOpen(false);
 		}
+	};
+
+	const handleCloseSnackbar = (_event?: Event | React.SyntheticEvent, reason?: string) => {
+		if (reason === 'clickaway') return;
+		setSnackbar((s) => ({ ...s, open: false }));
 	};
 
 	React.useEffect(() => {
@@ -316,7 +346,8 @@ export default function AccountPage() {
 							<Button onClick={() => setUpdateOpen(false)}>Cancel</Button>
 							<Button
 								onClick={() => handleSaveEmail(updateEmail)}
-								variant='contained'>
+								variant='contained'
+								disabled={savingEmail}>
 								Save
 							</Button>
 						</DialogActions>
@@ -345,6 +376,20 @@ export default function AccountPage() {
 						</Paper>
 					</Box>
 				</TabPanel>
+
+				{/* Global snackbars for success / error feedback */}
+				<Snackbar
+					open={snackbar.open}
+					autoHideDuration={6000}
+					onClose={handleCloseSnackbar}
+					anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+					<Alert
+						onClose={handleCloseSnackbar}
+						severity={snackbar.severity}
+						sx={{ width: '100%' }}>
+						{snackbar.message}
+					</Alert>
+				</Snackbar>
 
 				<Dialog
 					open={deleteOpen}
