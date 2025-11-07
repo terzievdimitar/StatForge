@@ -5,7 +5,6 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import StorageIcon from '@mui/icons-material/Storage';
 import BoltIcon from '@mui/icons-material/Bolt';
-import LaunchIcon from '@mui/icons-material/Launch';
 
 const DashboardOverview = () => {
 	// placeholder data

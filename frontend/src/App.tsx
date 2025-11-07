@@ -12,6 +12,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme/theme.ts';
 import AboutPage from './pages/AboutPage.tsx';
 import DashboardOverview from './pages/DashboardOverview.tsx';
+import AccountPage from './pages/AccountPage.tsx';
 
 function App() {
 	const { user, checkAuth, checkingAuth } = useUserStore();
@@ -58,6 +59,10 @@ function App() {
 				<Route
 					path='/dashboard/overview'
 					element={user ? <DashboardOverview /> : <Login />}
+				/>
+				<Route
+					path='/dashboard/account'
+					element={user ? <AccountPage /> : <Login />}
 				/>
 			</Routes>
 		</ThemeProvider>
