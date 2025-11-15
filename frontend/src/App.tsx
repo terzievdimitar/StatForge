@@ -11,6 +11,8 @@ import { useGithubStore } from "./stores/useGithubStore.ts";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme/theme.ts";
 import AboutPage from "./pages/AboutPage.tsx";
+import DashboardOverview from "./pages/DashboardOverview.tsx";
+import AccountPage from "./pages/AccountPage.tsx";
 import PricingPage from "./pages/PricingPage.tsx";
 
 function App() {
@@ -35,19 +37,25 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={!user ? <LandingPage /> : <HostingPage />} />
-        <Route
-          path="/pricing"
-          element={!user ? <PricingPage /> : <LandingPage />}
-        />
         <Route path="/signup" element={!user ? <Signup /> : <LandingPage />} />
         <Route path="/login" element={!user ? <Login /> : <LandingPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
         <Route
           path="/about"
           element={!user ? <AboutPage /> : <HostingPage />}
         />
+        {/* Dashboard routes */}
         <Route
           path="/dashboard/hosting"
           element={user ? <HostingPage /> : <Login />}
+        />
+        <Route
+          path="/dashboard/overview"
+          element={user ? <DashboardOverview /> : <Login />}
+        />
+        <Route
+          path="/dashboard/account"
+          element={user ? <AccountPage /> : <Login />}
         />
       </Routes>
     </ThemeProvider>

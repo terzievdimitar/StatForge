@@ -98,6 +98,59 @@ export const logout: RequestHandler = async (req: Request, res: Response) => {
 	}
 };
 
+export const deleteAccount: RequestHandler = async (req: Request, res: Response) => {
+	try {
+		const userId = req.user?._id;
+
+		if (!userId) {
+			return res.status(400).json({ message: 'User ID not provided' });
+		}
+
+		// remove refresh token from redis if present
+		try {
+			await redis.del(`refreshToken:${userId}`);
+		} catch (redisErr) {
+			console.warn('Failed to remove refresh token from redis:', redisErr);
+		}
+
+		// delete user record
+		await User.findByIdAndDelete(userId);
+
+		// Clear cookies (ensure proper flags if necessary)
+		res.clearCookie('accessToken');
+		res.clearCookie('refreshToken');
+
+		res.status(200).json({ message: 'Account deleted successfully' });
+	} catch (error) {
+		console.log('Error deleting account:', error);
+		res.status(500).json({ message: 'Server error', error });
+	}
+};
+
+// Update Email
+export const updateEmail: RequestHandler = async (req: Request, res: Response) => {
+	try {
+		const userId = req.user?._id;
+		const { newEmail } = req.body as { newEmail: string };
+
+		if (!userId) {
+			return res.status(400).json({ message: 'User ID not provided' });
+		}
+		const user = await User.findById(userId);
+		if (!user) {
+			return res.status(404).json({ message: 'User not found' });
+		}
+
+		user.email = newEmail;
+		await user.save();
+
+		res.status(200).json({ message: 'Email updated successfully', email: user.email });
+	} catch (error) {
+		console.log('Error updating email:', error);
+		res.status(500).json({ message: 'Server error', error });
+	}
+};
+
 // refresh the access token
 export const refreshToken: RequestHandler = async (req: Request, res: Response) => {
 	try {
