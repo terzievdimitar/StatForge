@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { Box, Typography, Stack, TextField, Button, Divider, Select, MenuItem, InputLabel, FormControl, Collapse, Avatar, IconButton } from '@mui/material';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import ViteIcon from '../../public/icons/vite.svg';
 import NextJsIcon from '../../public/icons/nextjs.svg';
 import VueIcon from '../../public/icons/vue.svg';
@@ -22,17 +22,9 @@ const ImportRepo = () => {
 	const [envSettingsOpen, setEnvSettingsOpen] = useState(false);
 	const [envVariables, setEnvVariables] = useState([{ key: '', value: '' }]);
 
-	const { deployRepository, isDeploying, deploymentError, deploymentOutput, deploymentSuccess } = useDeploymentStore();
+	const { deployRepository, isDeploying, deploymentError, deploymentSuccess } = useDeploymentStore();
 
 	const toggleSettings = () => setSettingsOpen((prev) => !prev);
-
-	const outputRef = useRef<HTMLDivElement | null>(null);
-
-	useEffect(() => {
-		if (outputRef.current) {
-			outputRef.current.scrollTop = outputRef.current.scrollHeight;
-		}
-	}, [deploymentOutput]);
 
 	const handleAddEnvVariable = () => {
 		setEnvVariables((prev) => [...prev, { key: '', value: '' }]);
@@ -342,55 +334,23 @@ const ImportRepo = () => {
 							{isDeploying ? 'Deploying...' : 'Deploy'}
 						</Button>
 
-						{(() => {
-							if (deploymentOutput) {
-								return (
-									<Box sx={{ mt: 2, width: '100%' }}>
-										<Typography
-											variant='subtitle2'
-											sx={{ mb: 1 }}>
-											{deploymentSuccess ? (
-												<Typography
-													component='span'
-													color='success.main'>
-													Successfully deployed
-												</Typography>
-											) : (
-												<Typography
-													component='span'
-													color='error.main'>
-													Deployment failed
-												</Typography>
-											)}
-										</Typography>
-										<Box
-											sx={{
-												backgroundColor: 'background.paper',
-												border: '1px solid',
-												borderColor: 'divider',
-												p: 1,
-												maxHeight: 240,
-												overflow: 'auto',
-												fontFamily: 'monospace',
-												whiteSpace: 'pre-wrap',
-											}}
-											ref={outputRef}>
-											{deploymentOutput}
-										</Box>
-									</Box>
-								);
-							} else if (deploymentError) {
-								return (
-									<Typography
-										variant='body2'
-										color='error'
-										sx={{ mt: 1 }}>
-										{deploymentError}
-									</Typography>
-								);
-							}
-							return null;
-						})()}
+						{deploymentSuccess && (
+							<Typography
+								variant='body2'
+								color='limegreen'
+								sx={{ mt: 1 }}>
+								{deploymentSuccess}
+							</Typography>
+						)}
+
+						{deploymentError && (
+							<Typography
+								variant='body2'
+								color='error'
+								sx={{ mt: 1 }}>
+								{deploymentError}
+							</Typography>
+						)}
 					</Stack>
 				</Box>
 			) : (

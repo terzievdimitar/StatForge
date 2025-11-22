@@ -89,7 +89,7 @@ function ResponsiveAppBar() {
 						<Toolbar disableGutters>
 							<Box
 								component='a'
-								href='/'
+								href={user ? '/dashboard/overview' : '/'}
 								sx={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
 								<Box
 									component='img'
