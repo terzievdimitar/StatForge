@@ -12,10 +12,12 @@ const ImportRepo = () => {
 	const repo = location.state?.repo; // Retrieve repository details from state
 
 	const [framework, setFramework] = useState('vite');
+	const [port, setPort] = useState('3000');
 	const [rootDirectory, setRootDirectory] = useState('./');
 	const [buildCommand, setBuildCommand] = useState('npm run build');
 	const [outputDirectory, setOutputDirectory] = useState('dist');
 	const [installCommand, setInstallCommand] = useState('npm install');
+	const [startCommand, setStartCommand] = useState('npm run start');
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [envSettingsOpen, setEnvSettingsOpen] = useState(false);
 	const [envVariables, setEnvVariables] = useState([{ key: '', value: '' }]);
@@ -44,24 +46,32 @@ const ImportRepo = () => {
 		// Update commands based on selected framework
 		switch (framework) {
 			case 'vite':
+				setPort('3000');
 				setBuildCommand('npm run build');
 				setOutputDirectory('dist');
 				setInstallCommand('npm install');
+				setStartCommand('npm run start');
 				break;
 			case 'next.js':
+				setPort('3000');
 				setBuildCommand('next build');
 				setOutputDirectory('.next');
 				setInstallCommand('npm install');
+				setStartCommand('next start');
 				break;
 			case 'vue':
+				setPort('3000');
 				setBuildCommand('npm run build');
 				setOutputDirectory('dist');
 				setInstallCommand('npm install');
+				setStartCommand('npm run serve');
 				break;
 			default:
+				setPort('3000');
 				setBuildCommand('npm run build');
 				setOutputDirectory('dist');
 				setInstallCommand('npm install');
+				setStartCommand('npm run start');
 		}
 	}, [framework]);
 
@@ -216,6 +226,18 @@ const ImportRepo = () => {
 										onChange={(e) => setInstallCommand(e.target.value)}
 										fullWidth
 									/>
+									<TextField
+										label='Start Command'
+										value={startCommand}
+										onChange={(e) => setStartCommand(e.target.value)}
+										fullWidth
+									/>
+									<TextField
+										label='Running App Port'
+										value={port}
+										onChange={(e) => setPort(e.target.value)}
+										fullWidth
+									/>
 								</Stack>
 							</Collapse>
 						</Box>
@@ -297,10 +319,12 @@ const ImportRepo = () => {
 							sx={{ mt: 2 }}
 							onClick={() =>
 								deployRepository(
+									port,
 									repo.owner?.login || repo.owner, // Ensure owner is a string
 									repo.name,
 									framework,
 									buildCommand,
+									startCommand,
 									outputDirectory,
 									installCommand,
 									envVariables

@@ -5,10 +5,12 @@ interface DeploymentState {
 	isDeploying: boolean;
 	deploymentError: string | null;
 	deployRepository: (
+		port: string,
 		repoOwner: string,
 		repoName: string,
 		framework: string,
 		buildCommand: string,
+		startCommand: string,
 		outputDirectory: string,
 		installCommand: string,
 		envVariables: Array<{ key: string; value: string }>
@@ -19,15 +21,17 @@ const useDeploymentStore = create<DeploymentState>((set) => ({
 	isDeploying: false,
 	deploymentError: null,
 
-	deployRepository: async (repoOwner, repoName, framework, buildCommand, outputDirectory, installCommand, envVariables) => {
+	deployRepository: async (port, repoOwner, repoName, framework, buildCommand, startCommand, outputDirectory, installCommand, envVariables) => {
 		set({ isDeploying: true, deploymentError: null });
 
 		try {
 			const response = await axios.post('/github/deploy', {
+				port,
 				repoOwner,
 				repoName,
 				framework,
 				buildCommand,
+				startCommand,
 				outputDirectory,
 				installCommand,
 				envVariables,

@@ -85,7 +85,7 @@ export const githubAppCallback: RequestHandler = async (req, res) => {
 		await user.save();
 
 		// Redirect to the dashboard
-		res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+		res.redirect(`${process.env.CLIENT_URL}/dashboard/hosting`);
 	} catch (error: any) {
 		console.error('Error during GitHub App callback:', error);
 		res.status(500).json({ message: 'Failed to handle GitHub App callback', error: error.message });
