@@ -12,7 +12,7 @@ const ImportRepo = () => {
 	const repo = location.state?.repo; // Retrieve repository details from state
 
 	const [framework, setFramework] = useState('vite');
-	const [port, setPort] = useState('3000');
+	const [port, setPort] = useState('4000');
 	const [rootDirectory, setRootDirectory] = useState('./');
 	const [buildCommand, setBuildCommand] = useState('npm run build');
 	const [outputDirectory, setOutputDirectory] = useState('dist');
@@ -46,28 +46,28 @@ const ImportRepo = () => {
 		// Update commands based on selected framework
 		switch (framework) {
 			case 'vite':
-				setPort('3000');
+				setPort('4000');
 				setBuildCommand('npm run build');
 				setOutputDirectory('dist');
 				setInstallCommand('npm install');
 				setStartCommand('npm run start');
 				break;
 			case 'next.js':
-				setPort('3000');
+				setPort('4000');
 				setBuildCommand('next build');
 				setOutputDirectory('.next');
 				setInstallCommand('npm install');
 				setStartCommand('next start');
 				break;
 			case 'vue':
-				setPort('3000');
+				setPort('4000');
 				setBuildCommand('npm run build');
 				setOutputDirectory('dist');
 				setInstallCommand('npm install');
 				setStartCommand('npm run serve');
 				break;
 			default:
-				setPort('3000');
+				setPort('4000');
 				setBuildCommand('npm run build');
 				setOutputDirectory('dist');
 				setInstallCommand('npm install');
