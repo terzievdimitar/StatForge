@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'http://localhost:3000/api';
-
-// const baseURL = 'https://statforge-ro5u.onrender.com/api';
+const baseURL = import.meta.env.MODE === 'production' ? 'https://statforge-ro5u.onrender.com/api' : 'http://localhost:3000/api';
 
 const axiosInstance = axios.create({
 	baseURL: baseURL,

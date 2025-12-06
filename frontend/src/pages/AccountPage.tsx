@@ -73,7 +73,7 @@ export default function AccountPage() {
 		severity: 'success',
 	});
 
-	const { user, logout } = useUserStore();
+	const { user } = useUserStore();
 	const navigate = useNavigate();
 	const [deleteOpen, setDeleteOpen] = useState(false);
 
