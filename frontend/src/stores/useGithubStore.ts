@@ -29,9 +29,7 @@ export const useGithubStore = create<GithubStore>((set) => ({
 	githubAppCallback: async (code: string, installationId: string) => {
 		set({ loading: true });
 		try {
-			const response = await axios.get(`/github/app-callback?code=${code}&installation_id=${installationId}&setup_action=install`, {
-				withCredentials: true, // Ensure cookies are sent with the request
-			});
+			const response = await axios.get(`/github/app-callback?code=${code}&installation_id=${installationId}&setup_action=install`);
 			set({ repositories: response.data.repositories, loading: false });
 		} catch (error) {
 			set({ loading: false });
