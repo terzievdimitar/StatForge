@@ -56,25 +56,6 @@ export const githubAppCallback: RequestHandler = async (req, res) => {
 	}
 
 	try {
-		// Generate a GitHub App JWT
-		const jwtToken = generateGitHubAppToken();
-		const octokit = createOctokitInstance(jwtToken);
-
-		// Generate an installation access token
-		const tokenResponse = await octokit.request('POST /app/installations/{installation_id}/access_tokens', {
-			installation_id: Number(installation_id),
-		});
-
-		const accessToken = tokenResponse.data.token;
-
-		// Use the installation access token to fetch repositories
-		const installationOctokit = createOctokitInstance(accessToken);
-		const reposResponse = await installationOctokit.request('GET /installation/repositories', {
-			headers: {
-				'X-GitHub-Api-Version': '2022-11-28',
-			},
-		});
-
 		// Save or update the installation_id in the user's profile
 		const user = await User.findById(userId);
 		if (!user) {
