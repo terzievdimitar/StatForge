@@ -41,7 +41,7 @@ const deployRepository = async (req: Request, res: Response) => {
 			return res.status(400).json({ error: 'Missing required fields' });
 		}
 
-		const deploymentDir = path.join(path.dirname(__dirname), '../../deployments', repoName);
+		const deploymentDir = path.join(path.dirname(__dirname), '../deployments', repoName);
 
 		// Step 1: Clone the repository
 		if (!fs.existsSync(deploymentDir)) {
