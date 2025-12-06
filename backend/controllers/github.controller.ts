@@ -32,15 +32,14 @@ const createOctokitInstance = (token: string) => {
 
 // Redirect user to GitHub App installation page
 export const githubAppInstall: RequestHandler = (req, res) => {
-	const { state } = req.query;
-	const githubAppInstallUrl = `https://github.com/apps/${process.env.GITHUB_APP_NAME}/installations/new${state ? `?state=${state}` : ''}`;
+	const githubAppInstallUrl = `https://github.com/apps/${process.env.GITHUB_APP_NAME}/installations/new`;
 	res.redirect(githubAppInstallUrl);
 };
 
 // Handle GitHub App installation callback
 export const githubAppCallback: RequestHandler = async (req, res) => {
-	const { code, installation_id, setup_action, state } = req.query;
-	const userId = state; // Use state as userId
+	const { code, installation_id, setup_action } = req.query;
+	const userId = req.user?._id;
 
 	console.log('GitHub App Callback Parameters:', { code, installation_id, setup_action, userId });
 
@@ -95,7 +94,7 @@ export const githubAppCallback: RequestHandler = async (req, res) => {
 
 // Fetch repositories for a specific installation
 export const getRepositories: RequestHandler = async (req, res) => {
-	const userId = req.user?._id; // Assuming userId is available from authentication middleware
+	const userId = req.user?._id;
 
 	if (!userId) {
 		return res.status(400).json({ message: 'User ID not provided' });
