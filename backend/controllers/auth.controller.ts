@@ -176,8 +176,8 @@ export const refreshToken: RequestHandler = async (req: Request, res: Response) 
 
 		res.cookie('accessToken', accessToken, {
 			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
-			sameSite: 'strict',
+			secure: true,
+			sameSite: 'none',
 			maxAge: 15 * 60 * 1000, // 15 minutes
 		});
 
