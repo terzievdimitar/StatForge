@@ -64,6 +64,8 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
 
 		const user = await User.findOne({ email });
 
+		console.log('Login attempt for email:', email, password, user);
+
 		if (user && (await user.comparePassword(password))) {
 			const { accessToken, refreshToken } = generateToken(user._id.toString());
 			await storeRefreshToken(user._id.toString(), refreshToken);
@@ -74,6 +76,9 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
 				email: user.email,
 				name: user.name,
 			});
+		} else {
+			console.log('Login attempt for email:', email, password, user);
+			res.status(400).json({ message: 'Invalid email or password' });
 		}
 	} catch (error) {
 		console.log('Error during login:', error);

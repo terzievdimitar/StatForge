@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import axios from '../lib/axios';
-import { redirect } from 'react-router-dom';
 
 interface UserStore {
 	user: { name: string; email: string } | null;
@@ -35,10 +34,10 @@ export const useUserStore = create<UserStore>((set, get) => ({
 		try {
 			const response = await axios.post('/auth/login', { email, password });
 			set({ user: response.data, loading: false });
-			redirect('/dashboard');
-		} catch (error) {
-			set({ loading: false });
+		} catch (error: any) {
+			set({ loading: false }); // Ensure loading is reset
 			console.error('Login error:', error);
+			throw new Error(error.response?.data?.message || 'Invalid email or password');
 		}
 	},
 

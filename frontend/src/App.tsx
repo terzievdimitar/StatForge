@@ -39,40 +39,40 @@ function App() {
 			<Routes>
 				<Route
 					path='/'
-					element={!user ? <LandingPage /> : <HostingPage />}
+					element={!user ? <LandingPage /> : <DashboardOverview />}
 				/>
 				<Route
 					path='/signup'
-					element={!user ? <Signup /> : <LandingPage />}
+					element={!user && <Signup />}
 				/>
 				<Route
 					path='/login'
-					element={!user ? <Login /> : <LandingPage />}
+					element={!user && <Login />}
 				/>
 				<Route
 					path='/pricing'
-					element={<PricingPage />}
+					element={!user && <PricingPage />}
 				/>
 				<Route
 					path='/about'
-					element={!user ? <AboutPage /> : <HostingPage />}
+					element={!user && <AboutPage />}
 				/>
 				{/* Dashboard routes */}
 				<Route
-					path='/dashboard/hosting'
-					element={user ? <HostingPage /> : <Login />}
+					path='/dashboard/overview'
+					element={!user ? <Login /> : <DashboardOverview />}
 				/>
 				<Route
-					path='/dashboard/overview'
-					element={user ? <DashboardOverview /> : <Login />}
+					path='/dashboard/hosting'
+					element={!user ? <Login /> : <HostingPage />}
 				/>
 				<Route
 					path='/dashboard/account'
-					element={user ? <AccountPage /> : <Login />}
+					element={!user ? <Login /> : <AccountPage />}
 				/>
 				<Route
 					path='/dashboard/import'
-					element={user ? <ImportRepo /> : <Login />}
+					element={!user ? <Login /> : <ImportRepo />}
 				/>
 			</Routes>
 		</ThemeProvider>

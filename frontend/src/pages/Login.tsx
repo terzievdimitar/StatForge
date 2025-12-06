@@ -10,6 +10,7 @@ const Login = () => {
 		email: '',
 		password: '',
 	});
+	const [error, setError] = useState<string | null>(null);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,8 +20,13 @@ const Login = () => {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		await login(formData.email, formData.password);
-		navigate('/dashboard/overview');
+		setError(null); // Reset error before attempting login
+		try {
+			await login(formData.email, formData.password);
+			navigate('/dashboard/overview');
+		} catch (err: any) {
+			setError(err.message || 'An error occurred during login'); // Display error message
+		}
 	};
 
 	return (
@@ -85,6 +91,14 @@ const Login = () => {
 							margin='normal'
 							variant='outlined'
 						/>
+						{error && (
+							<Typography
+								variant='body2'
+								color='error'
+								sx={{ marginTop: 2, textAlign: 'center' }}>
+								{error}
+							</Typography>
+						)}
 						<Button
 							type='submit'
 							variant='contained'
