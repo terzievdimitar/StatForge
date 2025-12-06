@@ -20,7 +20,7 @@ export const useGithubStore = create<GithubStore>((set) => ({
 		set({ loading: true });
 		try {
 			// Redirect to the GitHub App installation URL
-			window.location.href = 'http://localhost:3000/api/github/app-install';
+			window.location.href = 'https://statforge-ro5u.onrender.com/api/github/app-install';
 		} catch (error) {
 			console.error('GitHub App installation error:', error);
 		}

@@ -40,7 +40,7 @@ const useDeploymentStore = create<DeploymentState>((set) => ({
 			});
 
 			console.log('Deployment response:', response.data);
-			set({ deploymentSuccess: `Successful deployment on http://localhost:${port}` });
+			set({ deploymentSuccess: `Successful deployment` });
 		} catch (error) {
 			console.error('Deployment error:', error);
 			set({ deploymentError: error instanceof Error ? error.message : 'Unknown error occurred' });
