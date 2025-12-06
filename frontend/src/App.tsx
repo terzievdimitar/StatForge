@@ -15,6 +15,8 @@ import DashboardOverview from './pages/DashboardOverview.tsx';
 import AccountPage from './pages/AccountPage.tsx';
 import PricingPage from './pages/PricingPage.tsx';
 import ImportRepo from './pages/ImportRepo.tsx';
+import Analytics from './pages/Analytics.tsx';
+import WebDevelopment from './pages/WebDevelopment.tsx';
 
 function App() {
 	const { user, checkAuth, checkingAuth } = useUserStore();
@@ -73,6 +75,14 @@ function App() {
 				<Route
 					path='/dashboard/import'
 					element={!user ? <Login /> : <ImportRepo />}
+				/>
+				<Route
+					path='/dashboard/analytics'
+					element={!user ? <Login /> : <Analytics />}
+				/>
+				<Route
+					path='/dashboard/web-development'
+					element={!user ? <Login /> : <WebDevelopment />}
 				/>
 			</Routes>
 		</ThemeProvider>
