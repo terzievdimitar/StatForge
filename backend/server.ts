@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 // CORS configuration
 app.use(
 	cors({
-		origin: 'http://localhost:5173', // Frontend URL
+		origin: 'https://statforge.dimitarterziev.com', // Frontend URL
 		credentials: true, // Allow cookies
 	})
 );
