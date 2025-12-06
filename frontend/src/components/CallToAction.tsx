@@ -17,10 +17,7 @@ const CallToAction: React.FC = () => {
 							borderRadius: 2,
 							p: { xs: 4, md: 6 },
 							// brighter inner gradient: increase theme color alpha and reduce dark overlay
-							background: `linear-gradient(180deg, ${alpha(theme.palette.primary.main, 0.5)}, ${alpha(
-								theme.palette.secondary.main,
-								0.8
-							)}, rgba(0,0,0,0.3))`,
+							background: `linear-gradient(180deg, ${alpha(theme.palette.primary.main, 0.5)},  rgba(28, 15, 8, 1))`,
 							// use a solid border color from the theme instead of the gradient ::before
 							border: `4px solid ${alpha(theme.palette.primary.main, 0.75)}`,
 							backgroundClip: 'padding-box',

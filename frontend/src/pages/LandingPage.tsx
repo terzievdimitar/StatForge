@@ -10,6 +10,9 @@ import SplitFeature from '../components/SplitFeature';
 import FAQ from '../components/FAQ';
 import CallToAction from '../components/CallToAction';
 import Footer from '../components/Footer';
+import hostingSvg from '../assets/landing-page/hosting.svg';
+import developmentSvg from '../assets/landing-page/development.svg';
+import analyticsSvg from '../assets/landing-page/analytics.svg';
 
 const LandingPage = () => {
 	const location = useLocation();
@@ -70,6 +73,7 @@ const LandingPage = () => {
 						</>
 					}
 					chips={['Global CDN', 'Automatic SSL', 'Backups & Restore', 'Autoscaling']}
+					illustration={hostingSvg}
 				/>
 
 				<SplitFeature
@@ -83,6 +87,7 @@ const LandingPage = () => {
 						</>
 					}
 					chips={['Frontend & Backend', 'CI/CD Pipelines', 'Third‑party Integrations']}
+					illustration={developmentSvg}
 				/>
 
 				<SplitFeature
@@ -95,6 +100,7 @@ const LandingPage = () => {
 						</>
 					}
 					chips={['Event Tracking', 'Dashboards', 'Performance Monitoring', 'A/B Experiments']}
+					illustration={analyticsSvg}
 				/>
 
 				{/* FAQ Section */}

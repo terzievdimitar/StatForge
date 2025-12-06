@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { alpha } from '@mui/material/styles';
 
 interface SplitFeatureProps {
 	eyebrow?: string;
@@ -12,9 +13,10 @@ interface SplitFeatureProps {
 	description: React.ReactNode;
 	chips?: string[];
 	reverse?: boolean; // show image on left when true
+	illustration?: string;
 }
 
-const SplitFeature: React.FC<SplitFeatureProps> = ({ eyebrow, title, description, chips = [], reverse = false }) => {
+const SplitFeature: React.FC<SplitFeatureProps> = ({ eyebrow, title, description, chips = [], reverse = false, illustration }) => {
 	return (
 		<Box sx={{ py: 8 }}>
 			<Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: reverse ? '1fr 560px' : '560px 1fr' }, gap: 6, alignItems: 'center' }}>
@@ -68,17 +70,21 @@ const SplitFeature: React.FC<SplitFeatureProps> = ({ eyebrow, title, description
 				{/* Right column - gradient card placeholder */}
 				<Box sx={{ order: reverse ? 1 : 2, display: 'flex', justifyContent: 'center' }}>
 					<Box
-						sx={{
+						sx={(theme) => ({
 							width: { xs: '100%', md: 520 },
 							height: 380,
 							borderRadius: 2,
 							overflow: 'hidden',
-							background: 'linear-gradient(135deg, rgba(235,94,40,0.95), rgba(145,45,181,0.95))',
+							background: `linear-gradient(180deg, ${alpha(theme.palette.primary.main, 0.5)},  rgba(28, 15, 8, 1))`,
 							boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
-						}}>
+						})}>
 						{/* insert screenshot/frame inside here if needed */}
 						<Box sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
-							<Typography sx={{ fontWeight: 700 }}>Illustration</Typography>
+							<img
+								src={illustration ? illustration : ''}
+								alt='Solution screenshot'
+								style={{ width: '80%', objectFit: 'contain' }}
+							/>
 						</Box>
 					</Box>
 				</Box>
