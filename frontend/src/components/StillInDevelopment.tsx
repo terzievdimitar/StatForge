@@ -8,10 +8,7 @@ const StillInDevelopment = () => (
 			flexDirection: 'column',
 			alignItems: 'center',
 			justifyContent: 'center',
-			minHeight: '60vh',
-			bgcolor: 'background.paper',
-			borderRadius: 2,
-			boxShadow: 2,
+			minHeight: '100vh',
 			p: 4,
 		}}>
 		<ConstructionIcon sx={{ fontSize: 64, color: 'warning.main', mb: 2 }} />

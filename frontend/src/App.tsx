@@ -81,7 +81,7 @@ function App() {
 					element={!user ? <Login /> : <Analytics />}
 				/>
 				<Route
-					path='/dashboard/web-development'
+					path='/dashboard/development'
 					element={!user ? <Login /> : <WebDevelopment />}
 				/>
 			</Routes>
