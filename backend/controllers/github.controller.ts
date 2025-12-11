@@ -32,16 +32,49 @@ const createOctokitInstance = (token: string) => {
 
 // Redirect user to GitHub App installation page
 export const githubAppInstall: RequestHandler = (req, res) => {
-	const githubAppInstallUrl = `https://github.com/apps/${process.env.GITHUB_APP_NAME}/installations/new`;
+	// Вече имаме req.user, защото route-ът е защитен
+	const userId = req.user?._id;
+
+	if (!userId) {
+		return res.status(401).json({ message: 'Unauthorized' });
+	}
+
+	// 1. Създаваме временен State Token, който съдържа userId
+	// Това е сигурно, защото е подписано с твоя таен ключ
+	const state = jwt.sign(
+		{ userId: userId.toString() },
+		process.env.ACCESS_TOKEN_SECRET as string, // Или друг секретен ключ
+		{ expiresIn: '10m' } // Валиден само 10 минути
+	);
+
+	// 2. Добавяме ?state=... към URL-а
+	const githubAppInstallUrl = `https://github.com/apps/${process.env.GITHUB_APP_NAME}/installations/new?state=${state}`;
+
 	res.redirect(githubAppInstallUrl);
 };
 
 // Handle GitHub App installation callback
 export const githubAppCallback: RequestHandler = async (req, res) => {
-	const { code, installation_id, setup_action } = req.query;
-	const userId = req.user?._id;
+	const { code, installation_id, setup_action, state } = req.query;
 
-	console.log('GitHub App Callback Parameters:', { code, installation_id, setup_action, userId });
+	console.log('GitHub Callback Parameters:', { code, installation_id, state });
+
+	// 3. Проверка дали имаме state
+	if (!state || typeof state !== 'string') {
+		return res.status(400).json({ message: 'Missing state parameter' });
+	}
+
+	let userId: string;
+
+	try {
+		// 4. Декодираме state токена, за да възстановим userId
+		// Тъй като protectRoute не работи тук (заради бисквитките), това ни е гаранцията за самоличност
+		const decoded = jwt.verify(state, process.env.ACCESS_TOKEN_SECRET as string) as { userId: string };
+		userId = decoded.userId;
+	} catch (error) {
+		console.error('Invalid state token:', error);
+		return res.status(401).json({ message: 'Invalid or expired state parameter' });
+	}
 
 	if (!installation_id || !code || !setup_action || !userId) {
 		return res.status(400).json({

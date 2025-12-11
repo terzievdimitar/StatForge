@@ -3,49 +3,33 @@ import axios from '../lib/axios';
 
 interface GithubStore {
 	user: { name: string; email: string } | null;
-	repositories: any[]; // Add repositories state
+	repositories: any[];
 	loading: boolean;
-	setRepositories: (repositories: any[]) => void; // Add setRepositories function
-	githubAppInstall: () => Promise<void>;
-	githubAppCallback: (code: string, installationId: string) => Promise<void>;
-	getRepositories: () => Promise<void>; // Modified to include installationId
+	setRepositories: (repositories: any[]) => void;
+	githubAppInstall: () => void;
+	getRepositories: () => Promise<void>;
 }
 
 export const useGithubStore = create<GithubStore>((set) => ({
 	user: null,
-	repositories: [], // Initialize repositories state
+	repositories: [],
 	loading: false,
 
-	githubAppInstall: async () => {
+	githubAppInstall: () => {
 		set({ loading: true });
-		try {
-			// Redirect to the GitHub App installation URL
-			window.location.href = 'https://statforge-ro5u.onrender.com/api/github/app-install';
-		} catch (error) {
-			console.error('GitHub App installation error:', error);
-		}
+		// Redirect to backend endpoint to start GitHub App installation
+		window.location.href = 'https://statforge-ro5u.onrender.com/api/github/app-install';
 	},
 
-	githubAppCallback: async (code: string, installationId: string) => {
-		set({ loading: true });
-		try {
-			const response = await axios.get(`/github/app-callback?code=${code}&installation_id=${installationId}&setup_action=install`, {
-				withCredentials: true, // Ensure cookies are sent with the request
-			});
-			set({ repositories: response.data.repositories, loading: false });
-		} catch (error) {
-			set({ loading: false });
-			console.error('Failed to handle GitHub App callback:', error);
-		}
-	},
+	setRepositories: (repositories: any[]) => set({ repositories: repositories }),
 
-	setRepositories: (repositories: any[]) => set({ repositories: repositories }), // Implement setRepositories
+	// When called, fetches the list of repositories from the backend
 	getRepositories: async () => {
 		set({ loading: true });
 		try {
 			const response = await axios.get('/github/repositories');
 			set({ repositories: response.data, loading: false });
-			console.log('Fetched Repositories in frontend:', response.data.repositories);
+			console.log('Fetched Repositories:', response.data);
 		} catch (error) {
 			set({ loading: false });
 			console.error('Failed to fetch repositories:', error);

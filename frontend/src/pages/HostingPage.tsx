@@ -26,7 +26,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import PersonIcon from '@mui/icons-material/Person';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useGithubStore } from '../stores/useGithubStore';
 
 type Repo = {
@@ -39,17 +39,9 @@ type Repo = {
 };
 
 const HostingPage = () => {
-	const {
-		repositories = [],
-		loading,
-		githubAppInstall,
-		githubAppCallback,
-		getRepositories,
-		// optional: logoutGithub,
-	} = useGithubStore();
+	const { repositories = [], loading, githubAppInstall, getRepositories } = useGithubStore();
 	const navigate = useNavigate();
 
-	const [searchParams] = useSearchParams();
 	const [query, setQuery] = useState('');
 	const [owner, setOwner] = useState<string>('');
 	const [ownerAvatar, setOwnerAvatar] = useState<string | undefined>(undefined);
@@ -59,12 +51,6 @@ const HostingPage = () => {
 	const menuOpen = Boolean(anchorEl);
 	const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(e.currentTarget);
 	const closeMenu = () => setAnchorEl(null);
-
-	useEffect(() => {
-		const code = searchParams.get('code');
-		const installationId = searchParams.get('installation_id');
-		if (code && installationId) githubAppCallback(code, installationId);
-	}, [searchParams, githubAppCallback]);
 
 	useEffect(() => {
 		getRepositories();
@@ -191,7 +177,7 @@ const HostingPage = () => {
 									<MenuItem
 										onClick={() => {
 											closeMenu();
-											// отваряне в нов таб за инсталация/логин
+											// open GitHub App installation flow
 											githubAppInstall();
 										}}>
 										<ListItemIcon>
@@ -199,14 +185,6 @@ const HostingPage = () => {
 										</ListItemIcon>
 										Add from GitHub
 									</MenuItem>
-
-									{/* Ако добавиш излизане в store:
-                <MenuItem onClick={() => { closeMenu(); logoutGithub(); }}>
-                  <ListItemIcon>
-                    <LogoutIcon fontSize="small" />
-                  </ListItemIcon>
-                  Logout
-                </MenuItem> */}
 								</Menu>
 
 								{/* Search */}
@@ -252,8 +230,8 @@ const HostingPage = () => {
 									<List
 										disablePadding
 										sx={{
-											height: 320, // <-- фиксирана височина (не се променя при търсене)
-											overflowY: 'auto', // <-- скрол по Y
+											height: 320,
+											overflowY: 'auto',
 										}}>
 										{filtered.length === 0 ? (
 											<Stack
