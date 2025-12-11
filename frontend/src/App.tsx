@@ -16,6 +16,7 @@ import AccountPage from './pages/AccountPage.tsx';
 import PricingPage from './pages/PricingPage.tsx';
 import ImportRepo from './pages/ImportRepo.tsx';
 import Analytics from './pages/Analytics.tsx';
+import ContactSalesPage from './pages/ContactSalesPage.tsx';
 import WebDevelopment from './pages/WebDevelopment.tsx';
 
 function App() {
@@ -58,6 +59,10 @@ function App() {
 				<Route
 					path='/about'
 					element={!user && <AboutPage />}
+				/>
+				<Route
+					path='/contact/sales'
+					element={!user && <ContactSalesPage />}
 				/>
 				{/* Dashboard routes */}
 				<Route
