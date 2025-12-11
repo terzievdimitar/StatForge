@@ -185,7 +185,7 @@ export const WHITE_LABEL_PLANS: Tier[] = [
 	},
 ];
 
-const formatPrice = (amount: number) => (amount === 0 ? 'Free' : `$${amount}`);
+const formatPrice = (priceMonthly: number) => (priceMonthly === 0 ? 'Custom Pricing' : `$${priceMonthly}`);
 
 function a11yProps(index: number) {
 	return {
@@ -373,43 +373,84 @@ const PricingPage = () => {
 				<Container
 					maxWidth='md'
 					sx={{ py: { xs: 6, md: 10 } }}>
-					<Card
-						sx={{ borderRadius: 2 }}
-						elevation={3}>
-						<CardHeader
-							title='Custom Development Services'
-							subheader='Bespoke web development for complex client projects, built on top of StatForge.'
-							sx={{ '& .MuiCardHeader-title': { fontWeight: 800 } }}
-						/>
-						<CardContent>
-							<List dense>
-								{DEVELOPMENT_PLANS[0].features.map((f) => (
-									<ListItem
-										key={f}
-										sx={{ py: 0.5 }}>
-										<ListItemIcon sx={{ minWidth: 36 }}>
-											<CheckCircleIcon
-												color='primary'
-												fontSize='small'
-											/>
-										</ListItemIcon>
-										<ListItemText
-											primaryTypographyProps={{ variant: 'body2' }}
-											primary={f}
+					<Box
+						display='flex'
+						justifyContent='center'>
+						{DEVELOPMENT_PLANS.map((tier) => {
+							const price = billing === 'yearly' ? tier.priceYearly : tier.priceMonthly;
+							const subLabel = tier.priceMonthly === 0 ? '' : billing === 'yearly' ? 'per month, billed yearly' : 'per month';
+							return (
+								<Card
+									key={tier.id}
+									elevation={tier.highlighted ? 6 : 2}
+									sx={{
+										width: { xs: '100%', sm: 500, md: 600 },
+										mx: 2,
+										borderRadius: 2,
+										position: 'relative',
+										overflow: 'hidden',
+									}}>
+									{tier.highlighted && (
+										<Chip
+											label='Most Popular'
+											color='primary'
+											size='small'
+											sx={{ position: 'absolute', top: 12, right: 12, fontWeight: 700 }}
 										/>
-									</ListItem>
-								))}
-							</List>
-							<Button
-								variant='contained'
-								color='primary'
-								href={DEVELOPMENT_PLANS[0].href}
-								endIcon={<ArrowForwardIcon />}
-								sx={{ mt: 3 }}>
-								{DEVELOPMENT_PLANS[0].cta}
-							</Button>
-						</CardContent>
-					</Card>
+									)}
+									<CardHeader
+										title={tier.name}
+										subheader={tier.description}
+										sx={{ '& .MuiCardHeader-title': { fontWeight: 800 } }}
+									/>
+									<CardContent>
+										<Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 2 }}>
+											<Typography
+												variant='h4'
+												sx={{ fontWeight: 900 }}>
+												{formatPrice(price)}
+											</Typography>
+											{subLabel && (
+												<Typography
+													variant='body2'
+													sx={{ color: 'text.secondary' }}>
+													{subLabel}
+												</Typography>
+											)}
+										</Box>
+										<Button
+											fullWidth
+											variant={tier.highlighted ? 'contained' : 'outlined'}
+											color={tier.highlighted ? 'primary' : 'inherit'}
+											href={tier.href}
+											endIcon={<ArrowForwardIcon />}
+											sx={{ mb: 2 }}>
+											{tier.cta}
+										</Button>
+										<Divider sx={{ my: 2 }} />
+										<List dense>
+											{tier.features.map((f) => (
+												<ListItem
+													key={f}
+													sx={{ py: 0.5 }}>
+													<ListItemIcon sx={{ minWidth: 36 }}>
+														<CheckCircleIcon
+															color='primary'
+															fontSize='small'
+														/>
+													</ListItemIcon>
+													<ListItemText
+														primaryTypographyProps={{ variant: 'body2' }}
+														primary={f}
+													/>
+												</ListItem>
+											))}
+										</List>
+									</CardContent>
+								</Card>
+							);
+						})}
+					</Box>
 				</Container>
 			)}
 
@@ -500,43 +541,84 @@ const PricingPage = () => {
 				<Container
 					maxWidth='md'
 					sx={{ py: { xs: 6, md: 10 } }}>
-					<Card
-						sx={{ borderRadius: 2 }}
-						elevation={3}>
-						<CardHeader
-							title='White-Label Partner Program'
-							subheader='Rebrand StatForge as your own infrastructure and offer it to your clients under your agency name.'
-							sx={{ '& .MuiCardHeader-title': { fontWeight: 800 } }}
-						/>
-						<CardContent>
-							<List dense>
-								{WHITE_LABEL_PLANS[0].features.map((f) => (
-									<ListItem
-										key={f}
-										sx={{ py: 0.5 }}>
-										<ListItemIcon sx={{ minWidth: 36 }}>
-											<CheckCircleIcon
-												color='primary'
-												fontSize='small'
-											/>
-										</ListItemIcon>
-										<ListItemText
-											primaryTypographyProps={{ variant: 'body2' }}
-											primary={f}
+					<Box
+						display='flex'
+						justifyContent='center'>
+						{WHITE_LABEL_PLANS.map((tier) => {
+							const price = billing === 'yearly' ? tier.priceYearly : tier.priceMonthly;
+							const subLabel = tier.priceMonthly === 0 ? '' : billing === 'yearly' ? 'per month, billed yearly' : 'per month';
+							return (
+								<Card
+									key={tier.id}
+									elevation={tier.highlighted ? 6 : 2}
+									sx={{
+										width: { xs: '100%', sm: 500, md: 600 },
+										mx: 2,
+										borderRadius: 2,
+										position: 'relative',
+										overflow: 'hidden',
+									}}>
+									{tier.highlighted && (
+										<Chip
+											label='Most Popular'
+											color='primary'
+											size='small'
+											sx={{ position: 'absolute', top: 12, right: 12, fontWeight: 700 }}
 										/>
-									</ListItem>
-								))}
-							</List>
-							<Button
-								variant='contained'
-								color='primary'
-								href={WHITE_LABEL_PLANS[0].href}
-								endIcon={<ArrowForwardIcon />}
-								sx={{ mt: 3 }}>
-								{WHITE_LABEL_PLANS[0].cta}
-							</Button>
-						</CardContent>
-					</Card>
+									)}
+									<CardHeader
+										title={tier.name}
+										subheader={tier.description}
+										sx={{ '& .MuiCardHeader-title': { fontWeight: 800 } }}
+									/>
+									<CardContent>
+										<Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 2 }}>
+											<Typography
+												variant='h4'
+												sx={{ fontWeight: 900 }}>
+												{formatPrice(price)}
+											</Typography>
+											{subLabel && (
+												<Typography
+													variant='body2'
+													sx={{ color: 'text.secondary' }}>
+													{subLabel}
+												</Typography>
+											)}
+										</Box>
+										<Button
+											fullWidth
+											variant={tier.highlighted ? 'contained' : 'outlined'}
+											color={tier.highlighted ? 'primary' : 'inherit'}
+											href={tier.href}
+											endIcon={<ArrowForwardIcon />}
+											sx={{ mb: 2 }}>
+											{tier.cta}
+										</Button>
+										<Divider sx={{ my: 2 }} />
+										<List dense>
+											{tier.features.map((f) => (
+												<ListItem
+													key={f}
+													sx={{ py: 0.5 }}>
+													<ListItemIcon sx={{ minWidth: 36 }}>
+														<CheckCircleIcon
+															color='primary'
+															fontSize='small'
+														/>
+													</ListItemIcon>
+													<ListItemText
+														primaryTypographyProps={{ variant: 'body2' }}
+														primary={f}
+													/>
+												</ListItem>
+											))}
+										</List>
+									</CardContent>
+								</Card>
+							);
+						})}
+					</Box>
 				</Container>
 			)}
 
