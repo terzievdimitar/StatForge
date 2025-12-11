@@ -31,26 +31,21 @@ const createOctokitInstance = (token: string) => {
 };
 
 // Redirect user to GitHub App installation page
-export const githubAppInstall: RequestHandler = (req, res) => {
-	// Вече имаме req.user, защото route-ът е защитен
+export const generateGithubInstallUrl: RequestHandler = (req, res) => {
 	const userId = req.user?._id;
 
 	if (!userId) {
 		return res.status(401).json({ message: 'Unauthorized' });
 	}
 
-	// 1. Създаваме временен State Token, който съдържа userId
-	// Това е сигурно, защото е подписано с твоя таен ключ
-	const state = jwt.sign(
-		{ userId: userId.toString() },
-		process.env.ACCESS_TOKEN_SECRET as string, // Или друг секретен ключ
-		{ expiresIn: '10m' } // Валиден само 10 минути
-	);
+	// 1. Създаваме State Token
+	const state = jwt.sign({ userId: userId.toString() }, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: '10m' });
 
-	// 2. Добавяме ?state=... към URL-а
-	const githubAppInstallUrl = `https://github.com/apps/${process.env.GITHUB_APP_NAME}/installations/new?state=${state}`;
+	// 2. Генерираме URL-а
+	const url = `https://github.com/apps/${process.env.GITHUB_APP_NAME}/installations/new?state=${state}`;
 
-	res.redirect(githubAppInstallUrl);
+	// 3. Връщаме URL-а като JSON, вместо да redirect-ваме сървърно
+	res.json({ url });
 };
 
 // Handle GitHub App installation callback

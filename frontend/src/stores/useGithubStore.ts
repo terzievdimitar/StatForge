@@ -15,10 +15,22 @@ export const useGithubStore = create<GithubStore>((set) => ({
 	repositories: [],
 	loading: false,
 
-	githubAppInstall: () => {
+	githubAppInstall: async () => {
 		set({ loading: true });
-		// Redirect to backend endpoint to start GitHub App installation
-		window.location.href = 'https://statforge-ro5u.onrender.com/api/github/app-install';
+		try {
+			// 1. Първо питаме backend-а "Къде да отида?" чрез защитена API заявка
+			// Тук бисквитките ще се изпратят коректно заради axios config-а
+			const response = await axios.get('/github/install-url');
+
+			// 2. Взимаме URL-а от отговора
+			const { url } = response.data;
+
+			// 3. Сега Frontend-ът прави пренасочването директно към GitHub
+			window.location.href = url;
+		} catch (error) {
+			console.error('GitHub App installation error:', error);
+			set({ loading: false });
+		}
 	},
 
 	setRepositories: (repositories: any[]) => set({ repositories: repositories }),
