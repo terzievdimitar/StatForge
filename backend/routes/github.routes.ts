@@ -5,7 +5,7 @@ import { deployRepository } from '../controllers/deployment.controller.ts';
 
 const router = express.Router();
 
-router.get('/app-install', protectRoute, generateGithubInstallUrl);
+router.get('/install-url', protectRoute, generateGithubInstallUrl);
 router.get('/app-callback', githubAppCallback);
 router.get('/repositories', protectRoute, getRepositories);
 router.post('/deploy', deployRepository);
