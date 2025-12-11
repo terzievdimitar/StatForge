@@ -94,8 +94,16 @@ export const logout: RequestHandler = async (req: Request, res: Response) => {
 			await redis.del(`refreshToken:${(decoded as any).userId}`);
 		}
 
-		res.clearCookie('accessToken');
-		res.clearCookie('refreshToken');
+		res.clearCookie('accessToken', {
+			httpOnly: true,
+			secure: true,
+			sameSite: 'none',
+		});
+		res.clearCookie('refreshToken', {
+			httpOnly: true,
+			secure: true,
+			sameSite: 'none',
+		});
 		res.status(200).json({ message: 'Logged out successfully' });
 	} catch (error) {
 		console.log('Error during logout:', error);
