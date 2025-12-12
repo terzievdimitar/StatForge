@@ -16,7 +16,13 @@
 ![](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
 ![](https://img.shields.io/badge/Stripe-008CDD?style=for-the-badge&logo=stripe&logoColor=white)
 
-<img src="./frontend/src/assets/landing-page/StatForge_Landing_Page.png" width="80%" alt="StatForge Dashboard Preview" />
+<a href="https://statforge.dimitarterziev.com" target="_blank" rel="noopener noreferrer">
+  <img
+    src="./frontend/src/assets/landing-page/StatForge_Landing_Page.png"
+    width="80%"
+    alt="StatForge Dashboard Preview"
+  />
+</a>
 
 </div>
 
@@ -100,8 +106,8 @@ To run the prototype locally:
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/terzievdimitar/statforge.git
-   cd statforge
+   git clone https://github.com/terzievdimitar/StatForge.git
+   cd StatForge
    ```
    
 2. **Install dependencies:**
@@ -169,7 +175,7 @@ To run the prototype locally:
 - **Development mode:** `npm run dev`.
 - **Production mode:** `npm run build && npm start`.
 
-> Open [http://localhost:3000](http://localhost:5173) to view the app in your browser.
+> Open [http://localhost:5173](http://localhost:5173) to view the app in your browser.
 
 ### 📃 API Documentation
 
@@ -179,7 +185,7 @@ Note: this is a simplified summary of the most important routes used in the prot
 
 The `server.ts` file initializes the Express server and sets up middleware and routes.
 
-### Key Points:
+#### Key Points:
 
 - **Environment Variables**:
 
@@ -194,12 +200,58 @@ The `server.ts` file initializes the Express server and sets up middleware and r
      - `/api/auth`: Handles authentication-related requests (signup, login, logout, refresh token).
      - `/api/github`: Handles installation of GitHub repositories inside StatForge, deploys them, and fetches them.
 
+- **Code Overview**:
+
+```typescript
+import express from 'express';
+import dotenv from 'dotenv';
+import { connectDB } from './lib/db.ts';
+import authRoutes from './routes/auth.route.ts';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import githubRoutes from './routes/github.routes.ts';
+
+dotenv.config({ path: '../.env' });
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// CORS configuration
+app.use(
+	cors({
+		origin: 'https://statforge.dimitarterziev.com', // Frontend URL
+		credentials: true, // Allow cookies
+	})
+);
+
+app.use(express.json({ limit: '50mb' }));
+app.use(cookieParser());
+
+// Health check endpoint to keep the backend awake on render.com
+app.use('/api/health', (req, res) => {
+	res.status(200).send({ success: true });
+});
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/github', githubRoutes);
+
+connectDB().then(() => {
+	app.listen(PORT, () => {
+		console.log(`Server is running on port ${PORT}`);
+	});
+});
+```
+
 #### **Authentication**
 
-- `POST /api/auth/register` – register a new user.
+- `POST /api/auth/signup` – register a new user.
 - `POST /api/auth/login` – log in and receive access + refresh tokens.
-- `POST /api/auth/refresh` – issue a new access token using the refresh token.
-- `POST /api/auth/logout` – invalidate the refresh token in Redis.
+- `POST /api/auth/logout` – log out the current user by invalidating the refresh token (in Redis).
+- `DELETE /api/auth/delete` – fully remove the authenticated user account.
+- `POST /api/auth/refresh-token` – issue a new access token using the refresh token.
+- `GET /api/auth/profile` – returns the authenticated user’s profile data.
+- `PUT /api/auth/update-email` – update the email address of the authenticated user.
 
 #### **GitHub & Deployments**
 
