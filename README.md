@@ -47,30 +47,34 @@ Future work (described in the report) includes first-party analytics, edge/VPS h
 ## ✨ Features (Prototype Scope)
 
 - **🔐 Authentication & Sessions**
-  - Email/password login.
-  - Access tokens (JWT) stored on the client.
-  - Refresh tokens stored in Redis (Upstash) for security.
+
+     - Email/password login.
+     - Access tokens (JWT) stored on the client.
+     - Refresh tokens stored in Redis (Upstash) for security.
 
 - **🧩 GitHub Integration**
-  - Connect a GitHub App installation.
-  - Fetch repositories belonging to the connected account.
-  - Select a repo and trigger deployment from the UI.
+
+     - Connect a GitHub App installation.
+     - Fetch repositories belonging to the connected account.
+     - Select a repo and trigger deployment from the UI.
 
 - **🚀 Deployment Service**
-  - Clone repository into `/deployments/<repoName>`.
-  - Install dependencies, run build command, and optionally start the app.
-  - Supports custom `build`, `start`, `install` commands and `.env` variables.
-  - Returns the deployment output path to the frontend.
+
+     - Clone repository into `/deployments/<repoName>`.
+     - Install dependencies, run build command, and optionally start the app.
+     - Supports custom `build`, `start`, `install` commands and `.env` variables.
+     - Returns the deployment output path to the frontend.
 
 - **📊 Basic Dashboard**
-  - Overview of connected GitHub account and available repositories.
-  - Form to configure deployment (commands, output directory, port, env vars).
+
+     - Overview of connected GitHub account and available repositories.
+     - Form to configure deployment (commands, output directory, port, env vars).
 
 - **🔮 Planned (Not Yet Implemented)**
-  - First-party analytics collection and dashboard.
-  - Edge/VPS hosting abstraction instead of local folder deployments.
-  - Stripe-based subscriptions and usage-based billing for agencies.
-  - White-label mode so agencies can resell StatForge under their own brand.
+     - First-party analytics collection and dashboard.
+     - Edge/VPS hosting abstraction instead of local folder deployments.
+     - Stripe-based subscriptions and usage-based billing for agencies.
+     - White-label mode so agencies can resell StatForge under their own brand.
 
 ## 👩‍💻 Tech Stack
 
@@ -97,19 +101,19 @@ To run the prototype locally:
 - **Node.js** (v20+ recommended)
 - **npm** or **yarn**
 - Access to:
-  - a **MongoDB** instance (local or cloud),
-  - an **Upstash Redis** database (or any Redis),
-  - a **GitHub App** (for repo access).
+     - a **MongoDB** instance (local or cloud),
+     - an **Upstash Redis** database (or any Redis),
+     - a **GitHub App** (for repo access).
 
 ### 🛠️ Installation
 
 1. **Clone the repository**
 
-   ```bash
-   git clone https://github.com/terzievdimitar/StatForge.git
-   cd StatForge
-   ```
-   
+      ```bash
+      git clone https://github.com/terzievdimitar/StatForge.git
+      cd StatForge
+      ```
+
 2. **Install dependencies:**
 
       Using Npm:
@@ -117,13 +121,14 @@ To run the prototype locally:
       ```bash
       cd frontend && npm install
       ```
+
       ```bash
       cd backend && npm install
       ```
 
 3. **Set up environment variables:**
 
-      Create a `.env.local` file in the root directory and add the following variables:
+      Create a `.env` file in the root directory and add the following variables:
 
       ```env
         # Deployment used by `npx convex dev`
@@ -155,11 +160,12 @@ To run the prototype locally:
       ```
 
 4. **Create a file for private key:**
-   ```text
-      -----BEGIN RSA PRIVATE KEY-----
-      MIIE...
-      -----END RSA PRIVATE KEY-----
-   ```
+
+      ```text
+         -----BEGIN RSA PRIVATE KEY-----
+         MIIE...
+         -----END RSA PRIVATE KEY-----
+      ```
 
 5. **Run the development server:**
 
@@ -167,7 +173,7 @@ To run the prototype locally:
       cd frontend && npm run dev
       cd backend && npm run dev
       ```
-      
+
 ## 📖 Usage
 
 ### ✔ Running the Website
@@ -197,6 +203,7 @@ The `server.ts` file initializes the Express server and sets up middleware and r
      - `connectDB()` establishes a connection to MongoDB.
 
 - **Routes**:
+
      - `/api/auth`: Handles authentication-related requests (signup, login, logout, refresh token).
      - `/api/github`: Handles installation of GitHub repositories inside StatForge, deploys them, and fetches them.
 
