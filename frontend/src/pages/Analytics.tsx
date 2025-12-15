@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
 	Box,
 	Container,
@@ -236,7 +236,7 @@ const Analytics = () => {
 													cy='50%'
 													outerRadius={70}
 													label>
-													{trafficData.map((entry, index) => (
+													{trafficData.map((_, index) => (
 														<Cell
 															key={`cell-${index}`}
 															fill={COLORS[index % COLORS.length]}
