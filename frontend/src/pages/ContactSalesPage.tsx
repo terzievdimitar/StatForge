@@ -20,7 +20,7 @@ const ContactSalesPage = () => {
 	});
 	const [success, setSuccess] = useState(false);
 	const [searchParams] = useSearchParams();
-	const partnershipType = searchParams.get('partnership') || '';
+	const partnershipType = searchParams.get('partnership') || 'development';
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
 		const { name, value, type, checked } = e.target as HTMLInputElement;

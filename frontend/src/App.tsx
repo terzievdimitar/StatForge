@@ -17,7 +17,6 @@ import PricingPage from './pages/PricingPage.tsx';
 import ImportRepo from './pages/ImportRepo.tsx';
 import Analytics from './pages/Analytics.tsx';
 import ContactSalesPage from './pages/ContactSalesPage.tsx';
-import WebDevelopment from './pages/WebDevelopment.tsx';
 
 function App() {
 	const { user, checkAuth, checkingAuth } = useUserStore();
@@ -87,7 +86,7 @@ function App() {
 				/>
 				<Route
 					path='/dashboard/development'
-					element={!user ? <Login /> : <WebDevelopment />}
+					element={!user ? <Login /> : <ContactSalesPage />}
 				/>
 			</Routes>
 		</ThemeProvider>
